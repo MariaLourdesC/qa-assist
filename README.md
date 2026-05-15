@@ -42,13 +42,13 @@ cd qa-assist-mvp
 # 2. Backend
 cd server
 cp .env.example .env       # editar JWT_SECRET y JWT_REFRESH_SECRET
-npm install
-npm run dev                # arranca en http://localhost:3001
+pnpm install
+pnpm dev                # arranca en http://localhost:3001
 
 # 3. Frontend (nueva terminal)
 cd frontend
-npm install
-npm run dev                # arranca en http://localhost:5173
+pnpm install
+pnpm dev                # arranca en http://localhost:5173
 ```
 
 La app queda disponible en **http://localhost:5173**
@@ -77,9 +77,9 @@ Ver `server/.env.example` para la lista completa.
 
 ```bash
 cd server
-npm test                   # corre los 156 tests con Vitest
-npm run test:watch         # modo watch
-npm run test:coverage      # con cobertura
+pnpm test                   # corre los 156 tests con Vitest
+pnpm test:watch         # modo watch
+pnpm test:coverage      # con cobertura
 ```
 
 Los tests cubren el pipeline completo: parser BDD, clasificador, rules engine, dedupe, scoring y quality checks.

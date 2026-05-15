@@ -57,7 +57,7 @@ jobs:
             git reset --hard origin/main
 
             echo "=== Build ==="
-            docker compose build
+            docker compose build --no-cache
 
             echo "=== Deploy ==="
             docker compose up -d --remove-orphans

@@ -1,5 +1,9 @@
 # Dependencies
 node_modules/
+.pnpm-store/
+
+# npm lockfile (usamos pnpm)
+package-lock.json
 
 # Environment — NUNCA commitear
 .env
