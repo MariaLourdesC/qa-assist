@@ -84,6 +84,11 @@ const registerLimiter = rateLimit({
   message: { error: 'Too many accounts created from this IP. Try again in an hour.' }
 });
 
+const refreshLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many refresh attempts. Try again in 15 minutes.' }
+});
+
 const forgotLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false,
   message: { error: 'Too many reset attempts. Try again in 15 minutes.' }
@@ -178,7 +183,7 @@ router.post('/login', loginLimiter, async (req, res) => {
 
 // ── POST /auth/refresh ────────────────────────────────────────────────────
 
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', refreshLimiter, async (req, res) => {
   const raw = req.cookies?.refresh_token;
   if (!raw) return res.status(401).json({ error: 'No refresh token' });
 
@@ -351,9 +356,29 @@ router.post('/reset-password', async (req, res) => {
     const [rowId, userId] = rows[0].values[0];
 
     const newHash = await bcrypt.hash(new_password, BCRYPT_ROUNDS);
-    db.run('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, userId]);
-    db.run('UPDATE password_reset_tokens SET used_at = datetime(\'now\') WHERE id = ?', [rowId]);
-    db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [userId]);
+
+    // Atomic transaction — token consumption + password update happen together.
+    // Without this, a crash between operations would leave the token reusable.
+    db.run('BEGIN IMMEDIATE');
+    try {
+      // Re-check inside transaction (prevent race condition between check and update)
+      const recheck = db.exec(
+        `SELECT id FROM password_reset_tokens
+         WHERE token_hash = ? AND expires_at > datetime('now') AND used_at IS NULL`,
+        [hash]
+      );
+      if (!recheck.length || !recheck[0].values.length) {
+        db.run('ROLLBACK');
+        return res.status(400).json({ error: 'Token invalid or expired' });
+      }
+      db.run('UPDATE password_reset_tokens SET used_at = datetime(\'now\') WHERE id = ?', [rowId]);
+      db.run('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, userId]);
+      db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [userId]);
+      db.run('COMMIT');
+    } catch (txErr) {
+      db.run('ROLLBACK');
+      throw txErr;
+    }
     saveDb();
 
     return res.json({ ok: true, message: 'Password reset. Please log in.' });
