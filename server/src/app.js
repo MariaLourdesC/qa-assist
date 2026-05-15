@@ -7,15 +7,32 @@ const requestLogger  = require('./middleware/requestLogger');
 
 const app = express();
 
-// ── Core middleware ───────────────────────────────────────────────────────
+// ── CORS — validate CORS_ORIGIN is set in production ─────────────────────
+if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGIN) {
+  rootLogger.error('CORS_ORIGIN must be set in production. Refusing to start.');
+  process.exit(1);
+}
+
 const corsOrigin = process.env.NODE_ENV === 'production'
-  ? process.env.CORS_ORIGIN                   // exact origin in prod
-  : (origin, cb) => cb(null, true);           // any origin in dev (localhost only matters in prod)
+  ? process.env.CORS_ORIGIN
+  : (origin, cb) => cb(null, true);           // any origin in dev
 
 app.use(cors({ origin: corsOrigin, credentials: true }));
-app.use(express.json());
+
+// ── Body parsing — explicit 1 MB limit ───────────────────────────────────
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 app.use(requestLogger);
+
+// ── Content-Type guard — reject non-JSON mutation requests ────────────────
+app.use((req, res, next) => {
+  if (['POST', 'PUT', 'PATCH'].includes(req.method) && req.path !== '/api/health') {
+    if (!req.is('application/json')) {
+      return res.status(415).json({ error: 'Content-Type must be application/json' });
+    }
+  }
+  next();
+});
 
 // ── Health (public) ───────────────────────────────────────────────────────
 app.get('/api/health', async (req, res) => {

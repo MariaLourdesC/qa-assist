@@ -9,10 +9,18 @@ services:
       NODE_ENV: production
       PORT: 3001
     volumes:
-      - qa_data:/app/data          # SQLite DB persiste aquí
-      - qa_backups:/app/backups    # backups diarios
+      - qa_data:/app/data
+      - qa_backups:/app/backups
     expose:
-      - "3001"                     # solo accesible internamente (nginx lo proxea)
+      - "3001"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
       interval: 30s
@@ -25,10 +33,18 @@ services:
     container_name: qa-assist-frontend
     restart: unless-stopped
     ports:
-      - "80:80"                    # HTTP — en prod Certbot/nginx-host maneja HTTPS
+      - "80:80"
     depends_on:
       backend:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
 
 volumes:
   qa_data:

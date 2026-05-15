@@ -17,7 +17,7 @@ const RESET_TTL_SEC      = 30 * 60;       // 30 min
 
 const COOKIE_BASE = {
   httpOnly: true,
-  sameSite: 'Lax',
+  sameSite: 'Strict',   // Lax → Strict: no cookie on cross-site navigations
   secure: process.env.NODE_ENV === 'production',
   path: '/'
 };

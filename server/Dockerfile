@@ -3,6 +3,9 @@ FROM node:24-alpine
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@9 --activate
 
+# Create non-root user
+RUN addgroup -g 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
+
 WORKDIR /app
 
 # Install deps first (cached layer)
@@ -12,8 +15,11 @@ RUN pnpm install --frozen-lockfile --prod
 # App source
 COPY src/ ./src/
 
-# Writable dirs for SQLite and backups
-RUN mkdir -p data backups
+# Writable dirs for SQLite and backups — owned by non-root user
+RUN mkdir -p data backups && chown -R appuser:appgroup /app
+
+# Drop root privileges
+USER appuser
 
 EXPOSE 3001
 

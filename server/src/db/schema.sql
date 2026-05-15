@@ -1,8 +1,9 @@
 -- QA Assist MVP - Schema v1
 
 CREATE TABLE IF NOT EXISTS projects (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  nombre TEXT NOT NULL,
+  id      INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL DEFAULT 0,   -- populated by migration 001; DEFAULT 0 for idempotency
+  nombre  TEXT NOT NULL,
   descripcion TEXT,
   dominio TEXT,
   contexto_general TEXT,

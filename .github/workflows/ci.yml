@@ -9,6 +9,11 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# Least-privilege: CI only needs to read code and write check results
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   # ── Backend: tests + security audit ──────────────────────────────────────
   backend:
@@ -37,8 +42,8 @@ jobs:
         run: pnpm test -- --reporter=verbose
         env:
           NODE_ENV: test
-          JWT_SECRET: test-secret-ci
-          JWT_REFRESH_SECRET: test-refresh-secret-ci
+          JWT_SECRET: ${{ secrets.TEST_JWT_SECRET || 'ci-test-secret-not-for-production' }}
+          JWT_REFRESH_SECRET: ${{ secrets.TEST_JWT_REFRESH_SECRET || 'ci-test-refresh-secret-not-for-production' }}
 
       - name: Security audit
         working-directory: server
