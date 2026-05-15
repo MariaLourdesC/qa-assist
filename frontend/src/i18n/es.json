@@ -1,0 +1,804 @@
+{
+  "header": {
+    "appName": "QA Assist",
+    "subtitle": "Story Analyzer · v1 MVP"
+  },
+  "footer": {
+    "label": "QA Assist · Local MVP"
+  },
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "registerTitle": "Crear cuenta",
+    "email": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "loginBtn": "Iniciar sesión",
+    "registerBtn": "Crear cuenta",
+    "switchToRegister": "¿No tienes cuenta? Regístrate",
+    "switchToLogin": "¿Ya tienes cuenta? Inicia sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loggingIn": "Entrando…",
+    "registering": "Creando cuenta…",
+    "loginSubtitle": "Accede a tus proyectos de QA",
+    "registerSubtitle": "Empieza a analizar historias hoy",
+    "loggedInAs": "Sesión activa",
+    "logout": "Cerrar sesión",
+    "profile": "Mi perfil",
+    "forgotTitle": "Recuperar contraseña",
+    "forgotSubtitle": "Te enviamos un enlace para restablecer tu contraseña.",
+    "forgotBtn": "Enviar",
+    "forgotSending": "Enviando…",
+    "forgotSuccess": "Si el email está registrado, recibirás las instrucciones.",
+    "forgotDevToken": "Modo dev — token de reset:",
+    "forgotDevHint": "Usá este token en la página de reset (no se envía por email en desarrollo).",
+    "backToLogin": "Volver al login",
+    "resetTitle": "Nueva contraseña",
+    "resetSubtitle": "Ingresá tu token y la nueva contraseña.",
+    "resetToken": "Token de reset",
+    "resetTokenPlaceholder": "Pegá el token aquí",
+    "newPassword": "Nueva contraseña",
+    "resetBtn": "Cambiar contraseña",
+    "resetting": "Cambiando…",
+    "resetSuccess": "Contraseña cambiada. Ya podés iniciar sesión.",
+    "profileTitle": "Mi perfil",
+    "displayName": "Nombre para mostrar",
+    "displayNamePlaceholder": "Cómo quieres que te llamen",
+    "displayNameHint": "Opcional. Si está vacío se muestra el email.",
+    "saveProfile": "Guardar cambios",
+    "savingProfile": "Guardando…",
+    "profileSaved": "Perfil actualizado",
+    "changePasswordTitle": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPasswordLabel": "Nueva contraseña",
+    "changePasswordBtn": "Cambiar contraseña",
+    "changingPassword": "Cambiando…",
+    "passwordChanged": "Contraseña cambiada. Iniciá sesión de nuevo.",
+    "accountSection": "Cuenta",
+    "memberSince": "Miembro desde",
+    "heroTitle": "Convierte historias en planes de prueba accionables.",
+    "heroSubtitle": "Análisis automático de user stories para equipos QA exigentes.",
+    "featureAnalysis": "Análisis estructurado de historias en segundos",
+    "featureCoverage": "Detecta ambigüedades, riesgos y casos borde",
+    "featureLocal": "Modo local-only para datos sensibles",
+    "localFirst": "Local-first by design",
+    "tabLogin": "Iniciar sesión",
+    "tabRegister": "Crear cuenta",
+    "withToken": "(con token)",
+    "termsNote": "Al continuar aceptas los términos de uso del producto."
+  },
+  "errorBoundary": {
+    "title": "Algo salió mal",
+    "subtitle": "La aplicación encontró un error inesperado. Recargá la página para continuar.",
+    "reload": "Recargar la página",
+    "details": "Detalles técnicos"
+  },
+  "onboarding": {
+    "title": "¡Bienvenido a QA Assist!",
+    "subtitle": "Convierte historias ambiguas en análisis QA estructurado.",
+    "step1Title": "Crea un proyecto",
+    "step1Desc": "Define el dominio, glosario y reglas de negocio.",
+    "step2Title": "Captura una historia",
+    "step2Desc": "Pega la historia tal como la recibiste del PO.",
+    "step3Title": "Analiza y refina",
+    "step3Desc": "Obtén ambigüedades, criterios, test cases y riesgos en segundos.",
+    "demoCta": "Crear proyecto demo",
+    "demoLoading": "Creando demo…",
+    "skip": "Empezar desde cero",
+    "demoCreated": "Proyecto demo creado",
+    "demoError": "No se pudo crear el demo: {{message}}"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "loading": "Cargando…",
+    "saving": "Guardando…",
+    "analyzing": "Analizando…",
+    "optional": "(opcional)",
+    "required": "*",
+    "noData": "Sin datos"
+  },
+  "themeToggle": {
+    "toLight": "Cambiar a tema claro",
+    "toDark": "Cambiar a tema oscuro"
+  },
+  "languageToggle": {
+    "label": "Idioma",
+    "switchToEn": "Cambiar a inglés",
+    "switchToEs": "Cambiar a español"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "create": "Crear proyecto",
+    "emptyTitle": "No hay proyectos todavía",
+    "emptyDesc": "Crea tu primer proyecto para comenzar a analizar historias y generar reportes de QA.",
+    "emptyAction": "Crear primer proyecto",
+    "loading": "Cargando proyectos...",
+    "searchPlaceholder": "Buscar por nombre, dominio o descripción…",
+    "clearSearch": "Limpiar búsqueda",
+    "noMatches": "Sin coincidencias para \"{{query}}\"",
+    "matching_one": "{{count}} de {{total}}",
+    "matching_other": "{{count}} de {{total}}",
+    "card": {
+      "noDescription": "Sin descripción",
+      "analyze": "Analizar"
+    },
+    "form": {
+      "createTitle": "Nuevo proyecto",
+      "editTitle": "Editar proyecto",
+      "createSubtitle": "Crea un proyecto para empezar a analizar historias",
+      "editSubtitle": "Actualiza la información y el contexto del proyecto",
+      "sectionIdentity": "Identidad",
+      "sectionContext": "Descripción y contexto",
+      "sectionGlossary": "Glosario",
+      "sectionRules": "Reglas de negocio",
+      "name": "Nombre",
+      "namePlaceholder": "Ej: Banca Digital",
+      "domain": "Dominio",
+      "domainPlaceholder": "Ej: Finanzas",
+      "sensitivity": "Sensibilidad",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Resumen breve del proyecto",
+      "contextGeneral": "Contexto general",
+      "contextPlaceholder": "Audiencia, alcance, restricciones de negocio…",
+      "contextHint": "Ayuda al análisis a interpretar las historias en el dominio correcto.",
+      "glossaryDesc": "Términos del dominio y sus definiciones",
+      "rulesDesc": "Restricciones y políticas que aplican al producto",
+      "createBtn": "Crear proyecto",
+      "updateBtn": "Actualizar proyecto",
+      "restrictedTitle": "Proyecto restringido",
+      "restrictedDesc": "El análisis híbrido (IA) quedará bloqueado. Solo se permitirá análisis local sobre las historias de este proyecto."
+    },
+    "sensitivity": {
+      "publico": "Público",
+      "interno": "Interno",
+      "sensible": "Sensible",
+      "restringido": "Restringido",
+      "publico_desc": "Sin restricciones de exposición",
+      "interno_desc": "Solo dentro de la organización",
+      "sensible_desc": "Datos críticos, manejar con cuidado",
+      "restringido_desc": "IA bloqueada — solo análisis local"
+    },
+    "deleteConfirm": "¿Eliminar proyecto \"{{name}}\"?",
+    "toast": {
+      "created": "Proyecto \"{{name}}\" creado",
+      "updated": "Proyecto \"{{name}}\" actualizado",
+      "deleted": "Proyecto \"{{name}}\" eliminado"
+    }
+  },
+  "duplicates": {
+    "warning_one": "Encontramos 1 historia parecida en este proyecto",
+    "warning_other": "Encontramos {{count}} historias parecidas en este proyecto",
+    "similar": "Similitud {{score}}%",
+    "viewAndLoad": "Cargar"
+  },
+  "templates": {
+    "applyButton": "Aplicar plantilla",
+    "applied": "Plantilla \"{{name}}\" aplicada",
+    "menuTitle": "Plantillas por dominio",
+    "customSection": "Mis plantillas",
+    "builtinSection": "Plantillas predefinidas",
+    "preview": "Agrega {{glossary}} términos al glosario y {{rules}} reglas de negocio.",
+    "saveFromProject": "Guardar proyecto como plantilla",
+    "saveModal": "Nombre de la plantilla",
+    "saveModalPlaceholder": "Ej: Mi plantilla bancaria",
+    "saveBtn": "Guardar",
+    "savingBtn": "Guardando…",
+    "savedOk": "Plantilla guardada",
+    "deleteConfirm": "¿Eliminar la plantilla \"{{name}}\"?",
+    "deletedOk": "Plantilla eliminada",
+    "editModal": "Editar plantilla",
+    "noCustom": "Aún no tenés plantillas guardadas.",
+    "domains": {
+      "banking":     "Banking · Servicios financieros",
+      "ecommerce":   "E-commerce · Retail online",
+      "healthcare":  "Salud · Healthcare",
+      "saas":        "SaaS · Multi-tenant",
+      "education":   "Educación · EdTech",
+      "logistics":   "Logística · Supply chain"
+    }
+  },
+  "story": {
+    "newTitle": "Nueva historia",
+    "newSubtitle": "Captura la historia para iniciar el análisis",
+    "reanalyzeTitle": "Re-analizar historia",
+    "reanalyzeSubtitle": "Modifica el contenido y genera la versión v{{version}}",
+    "fields": {
+      "titulo": "Título",
+      "tituloPlaceholder": "Ej: Transferencia entre cuentas propias",
+      "tituloError": "El título es obligatorio",
+      "modulo": "Módulo",
+      "moduloPlaceholder": "Ej: Banca móvil",
+      "descripcion": "Descripción",
+      "descripcionPlaceholder": "Como cliente quiero…",
+      "descripcionError": "La descripción es obligatoria",
+      "descripcionTooLong": "La descripción supera el límite de {{max}} caracteres. Reducila para poder analizar.",
+    "descripcionHint":"Pega aquí la historia tal cual la recibiste del PO.",
+      "fuente": "Fuente",
+      "fuentePlaceholder": "Ej: Jira KEY-1234, Confluence, Reunión 28-abr",
+      "notasQa": "Notas QA",
+      "notasQaPlaceholder": "Contexto extra, casos a considerar, supuestos…"
+    },
+    "actions": {
+      "analyze": "Analizar historia",
+      "reanalyze": "Re-analizar (v{{version}})",
+      "newStory": "Nueva historia"
+    }
+  },
+  "rewrite": {
+    "label": "Mejorar historia",
+    "title": "Sugerencia de mejora",
+    "generating": "Generando sugerencia…",
+    "errorTitle": "No se pudo generar la sugerencia",
+    "original": "Historia original",
+    "improved": "Historia mejorada (IA)",
+    "changes": "Qué cambió y por qué",
+    "useVersion": "Usar esta versión",
+    "close": "Cerrar",
+    "noApiKey": "Modo Híbrido no disponible (falta API key). Activa modo Hybrid.",
+    "applied": "Historia mejorada cargada en el formulario",
+    "changesCount_one": "{{count}} cambio",
+    "changesCount_other": "{{count}} cambios"
+  },
+  "compare": {
+    "label": "Comparar",
+    "title": "Comparar versiones",
+    "leftVersion": "Versión base",
+    "rightVersion": "Versión comparada",
+    "summary": "{{added}} agregados · {{removed}} eliminados · {{unchanged}} sin cambios",
+    "added": "Agregados",
+    "removed": "Eliminados",
+    "unchanged": "Sin cambios",
+    "noChanges": "Sin diferencias en este bloque.",
+    "blocks": {
+      "ambiguedades": "Ambigüedades",
+      "preguntas_refinamiento": "Preguntas",
+      "criterios_aceptacion": "Criterios",
+      "test_cases": "Test Cases",
+      "negativos_edge_cases": "Edge Cases",
+      "riesgos": "Riesgos"
+    },
+    "needTwoVersions": "Necesitas al menos 2 versiones para comparar.",
+    "close": "Cerrar"
+  },
+  "feedbackHistory": {
+    "label": "Ver feedback previo",
+    "title": "Feedback recibido",
+    "loading": "Cargando feedback…",
+    "empty": "Aún no hay feedback en ninguna versión.",
+    "versionLabel": "v{{version}}",
+    "noComment": "(sin comentario)",
+    "close": "Cerrar"
+  },
+  "stats": {
+    "title": "Resumen del proyecto",
+    "stories_one": "Historia",
+    "stories_other": "Historias",
+    "analyzed": "Analizadas",
+    "drafts": "Borradores",
+    "totalAnalyses": "Análisis totales",
+    "avgAmb": "Ambigüedad promedio",
+    "avgCob": "Cobertura promedio",
+    "avgCompl": "Complejidad promedio",
+    "needsRefinement": "Requieren refinamiento",
+    "noData": "Sin análisis aún",
+    "loading": "Calculando…"
+  },
+  "history": {
+    "title": "Historial de historias",
+    "loading": "Cargando…",
+    "empty": "Aún no hay historias",
+    "count_one": "{{count}} historia en este proyecto",
+    "count_other": "{{count}} historias en este proyecto",
+    "matching_one": "{{count}} de {{total}}",
+    "matching_other": "{{count}} de {{total}}",
+    "searchPlaceholder": "Buscar por título o módulo…",
+    "clearSearch": "Limpiar búsqueda",
+    "noMatches": "Sin coincidencias para \"{{query}}\"",
+    "noStories": "Aún no se han creado historias en este proyecto.",
+    "showMore": "Ver {{count}} más ({{total}} restantes)",
+    "filter": {
+      "all":        "Todas",
+      "draft":      "Borradores",
+      "analyzed":   "Analizadas",
+      "in_testing": "En testing",
+      "passed":     "Pasaron",
+      "failed":     "Fallaron",
+      "approved":   "Aprobadas"
+    },
+    "sort": {
+      "recent": "Reciente",
+      "oldest": "Más antigua",
+      "az": "A → Z"
+    },
+    "estado": {
+      "draft":      "Borrador",
+      "analyzed":   "Analizada",
+      "in_testing": "En testing",
+      "passed":     "Pasó QA",
+      "failed":     "Falló QA",
+      "approved":   "Aprobada"
+    },
+    "active": "Activa",
+    "updatedAt": "Actualizada {{date}}",
+    "deleteConfirm": "¿Eliminar la historia \"{{title}}\" y todos sus análisis?",
+    "toast": {
+      "loaded": "Historia \"{{title}}\" cargada",
+      "deleted": "Historia \"{{title}}\" eliminada",
+      "loadError": "Error cargando historial: {{message}}"
+    }
+  },
+  "analysisMode": {
+    "title": "Modo de análisis",
+    "subtitle": "Elige cómo procesar la historia",
+    "localOnly": "Solo local",
+    "localOnlyDesc": "Análisis 100% local, sin enviar datos a servicios externos.",
+    "hybrid": "Híbrido (IA)",
+    "hybridDesc": "Enriquece el análisis local con un modelo externo.",
+    "blockedTitle": "Modo híbrido bloqueado",
+    "blockedDesc": "Este proyecto está marcado como restringido. Solo se permite análisis local.",
+    "iaBlocksTitle": "Bloques enriquecidos por IA",
+    "iaBlocks": {
+      "ambiguities": "Ambigüedades adicionales",
+      "questions": "Preguntas de refinamiento",
+      "risks": "Riesgos no obvios",
+      "edges": "Edge cases"
+    }
+  },
+  "feedback": {
+    "title": "¿Qué tan útil fue este análisis?",
+    "subtitle": "Tu feedback ayuda a calibrar la herramienta",
+    "options": {
+      "muy_util": "Muy útil",
+      "muy_util_desc": "Lista para usar",
+      "util": "Útil",
+      "util_desc": "Sirve con ajustes",
+      "poco_util": "Poco útil",
+      "poco_util_desc": "Necesita rehacerse",
+      "inutil": "Inútil",
+      "inutil_desc": "No aporta valor"
+    },
+    "comment": "Comentario",
+    "commentPlaceholder": "¿Algo que mejorar o destacar?",
+    "save": "Guardar feedback",
+    "saving": "Guardando…",
+    "savedBtn": "Guardado",
+    "prevLoaded": "Respuesta anterior",
+    "copy": "Copiar feedback",
+    "toast": {
+      "saved": "Feedback guardado",
+      "error": "Error: {{message}}"
+    }
+  },
+  "results": {
+    "placeholder": "Ingresa una historia y haz clic en \"Analizar\"",
+    "requiresRefinement": "⚠️ Requiere refinamiento",
+    "ambiguityLabel": "Ambigüedad: {{score}}/100. Devuelve al PO para refinar.",
+    "version": "Versión",
+    "versionsCount_one": "{{count}} versión",
+    "versionsCount_other": "{{count}} versiones",
+    "scores": {
+      "amb": "Amb",
+      "cob": "Cob",
+      "compl": "Compl"
+    },
+    "langChip": "Idioma",
+    "fromCache": "Caché",
+    "fromCacheTitle": "Resultado de IA obtenido del caché — no se llamó a Claude"
+  },
+  "versions": {
+    "deleteLabel": "Eliminar esta versión",
+    "deleteConfirm": "¿Eliminar {{version}}? Este análisis no se puede recuperar.",
+    "deleted": "{{version}} eliminada"
+  },
+  "analysisModeShort": {
+    "local_only": "Local",
+    "hybrid": "Híbrido"
+  },
+  "tipos": {
+    "formulario": "formulario",
+    "autenticacion": "autenticación",
+    "crud": "CRUD",
+    "transaccion": "transacción",
+    "desconocido": "desconocido"
+  },
+  "tabs": {
+    "structure": "Estructura",
+    "classification": "Clasificación",
+    "ambiguities": "Ambigüedades",
+    "questions": "Preguntas",
+    "criteria": "Criterios",
+    "testcases": "Test Cases",
+    "edges": "Edge Cases",
+    "risks": "Riesgos",
+    "quality": "Quality Checks",
+    "scores": "Scores"
+  },
+  "panels": {
+    "structure": {
+      "actor": "Actor",
+      "action": "Acción",
+      "objective": "Objetivo",
+      "notDetected": "No detectado",
+      "entities": "Entidades detectadas",
+      "integrations": "Integraciones detectadas",
+      "constraints": "Restricciones detectadas",
+      "roles": "Roles detectados",
+      "bddBadge": "Gherkin/BDD detectado",
+      "scenariosTitle": "Escenarios detectados",
+      "outlineBadge": "Esquema",
+      "given": "Dado",
+      "when": "Cuando",
+      "then": "Entonces",
+      "background": "Contexto (Background)",
+      "examples": "Ejemplos",
+      "tablesTitle": "Tablas de datos"
+    },
+    "classification": {
+      "primaryType": "Tipo primario",
+      "notDetermined": "No determinado",
+      "confidence": "Confianza",
+      "confidenceHigh": "Alta",
+      "confidenceMedium": "Media",
+      "confidenceLow": "Baja",
+      "subtypes": "Subtipos"
+    },
+    "ambiguities": {
+      "emptyTitle": "Sin ambigüedades detectadas",
+      "emptyDesc": "La historia se interpreta con claridad."
+    },
+    "questions": {
+      "emptyTitle": "No hay preguntas pendientes",
+      "emptyDesc": "No se requieren aclaraciones del producto."
+    },
+    "criteria": {
+      "emptyTitle": "Sin criterios de aceptación",
+      "emptyDesc": "Aún no se han generado criterios para esta historia."
+    },
+    "testcases": {
+      "emptyTitle": "Sin test cases generados",
+      "emptyDesc": "No se han generado casos de prueba todavía.",
+      "preconditions": "Precondiciones",
+      "steps": "Pasos",
+      "expected": "Resultado esperado"
+    },
+    "edges": {
+      "emptyTitle": "Sin edge cases identificados",
+      "emptyDesc": "No se han detectado casos negativos para esta historia."
+    },
+    "risks": {
+      "emptyTitle": "Sin riesgos identificados",
+      "emptyDesc": "No se detectaron riesgos relevantes en el análisis."
+    },
+    "quality": {
+      "checks": {
+        "cobertura_minima": "Cobertura mínima",
+        "cobertura_minima_desc": "Los criterios cubren los flujos principales de la historia.",
+        "casos_accionables": "Casos accionables",
+        "casos_accionables_desc": "Los test cases tienen pasos ejecutables y verificables.",
+        "sin_supuestos_no_soportados": "Sin supuestos infundados",
+        "sin_supuestos_no_soportados_desc": "Las afirmaciones del análisis se sostienen en el texto de la historia.",
+        "riesgos_relevantes": "Riesgos relevantes",
+        "riesgos_relevantes_desc": "Los riesgos identificados son pertinentes al alcance.",
+        "sin_redundancia_excesiva": "Sin redundancia",
+        "sin_redundancia_excesiva_desc": "No hay duplicación significativa entre items del análisis.",
+        "preguntas_refinamiento_utiles": "Preguntas útiles",
+        "preguntas_refinamiento_utiles_desc": "Las preguntas ayudan a aclarar las ambigüedades detectadas."
+      },
+      "refinementTitle": "Esta historia requiere refinamiento humano",
+      "refinementDesc": "Antes de pasar a desarrollo, revisar las ambigüedades y preguntas pendientes con el equipo de producto.",
+      "readyTitle": "Lista para refinar con el equipo",
+      "readyDesc": "El análisis no detectó bloqueos críticos para avanzar al backlog."
+    },
+    "scores": {
+      "amb": "Ambigüedad",
+      "cob": "Cobertura",
+      "compl": "Complejidad",
+      "interpretation": "Interpretación combinada",
+      "ambHigh": "La ambigüedad es alta: la historia requiere aclaración antes de implementarse.",
+      "ambMedium": "La ambigüedad es moderada: revisar las preguntas de refinamiento sugeridas.",
+      "ambLow": "La ambigüedad es baja: la historia se interpreta con claridad.",
+      "covHigh": "La cobertura es sólida: los criterios capturan los escenarios clave.",
+      "covMedium": "La cobertura es parcial: complementar con casos negativos y edge cases.",
+      "covLow": "La cobertura es insuficiente: faltan criterios y casos por cubrir.",
+      "compHigh": "La complejidad es elevada: considerar dividir la historia en piezas más pequeñas.",
+      "compLow": "La complejidad es manejable para una iteración estándar."
+    }
+  },
+  "badges": {
+    "severity": {
+      "alta": "Alta",
+      "media": "Media",
+      "baja": "Baja"
+    },
+    "origin": {
+      "local": "Local",
+      "ia": "IA",
+      "mixto": "Mixto"
+    }
+  },
+  "execution": {
+    "runButton": "Ejecutar tests",
+    "title": "Ejecución de tests",
+    "subtitle": "{{count}} casos de prueba para ejecutar",
+    "environment": "Ambiente / Entorno",
+    "environmentPlaceholder": "Ej: staging, v2.3.1, prod",
+    "start": "Iniciar ejecución",
+    "running": "Ejecución en curso",
+    "progress": "{{done}} / {{total}} completados",
+    "bugsCount": "{{count}} bug(s) encontrado(s)",
+    "finalize": "Finalizar y ver resumen",
+    "cancel": "Cancelar",
+    "exit": "Salir sin finalizar",
+    "status": {
+      "pass": "Pasó",
+      "fail": "Falló",
+      "blocked": "Bloqueado",
+      "skip": "Omitir",
+      "pending": "Pendiente"
+    },
+    "bugReport": "Reporte de bug",
+    "bugTitle": "Título del bug",
+    "bugActual": "Resultado real (qué ocurrió)",
+    "bugActualPlaceholder": "Describí qué pasó en lugar de lo esperado…",
+    "bugSeverity": "Severidad",
+    "bugEnvironment": "Ambiente",
+    "bugScreenshot": "URL de evidencia / screenshot",
+    "severity": {
+      "critica": "Crítica",
+      "alta": "Alta",
+      "media": "Media",
+      "baja": "Baja"
+    },
+    "summaryTitle": "Resumen de ejecución",
+    "date": "Fecha",
+    "results": "Resultados",
+    "bugsFound": "Bugs encontrados",
+    "exportBugsJira": "Exportar {{count}} bug(s) a Jira",
+    "exportBugsBtn": "Exportar {{count}} bug(s)",
+    "exportJiraTitle": "Credenciales de Jira",
+    "bugsExported": "{{count}} bug(s) exportados a Jira",
+    "bugsErrors": "{{count}} error(es) al exportar",
+    "copyMd": "Copiar como Markdown",
+    "copiedMd": "Reporte copiado al portapapeles",
+    "copyError": "No se pudo copiar",
+    "newRun": "Nueva ejecución",
+    "backToTcs": "Volver a test cases",
+    "sectionTc": "Test Cases ({{count}})",
+    "sectionEc": "Edge Cases / Negativos ({{count}})",
+    "approveBtn": "Aprobar historia",
+    "approved": "Historia aprobada ✓",
+    "approvedOk": "Historia marcada como aprobada",
+    "retest": "Re-testear {{count}} fallo(s)",
+    "bugStatusUpdated": "Estado del bug actualizado",
+    "bugNotes": "Notas internas",
+    "bugNotesPlaceholder": "Observaciones, contexto, pasos adicionales…",
+    "bugStatus": {
+      "open":      "Abierto",
+      "fixed":     "Corregido",
+      "verified":  "Verificado",
+      "wont_fix":  "No se corrige",
+      "duplicate": "Duplicado"
+    },
+    "history": {
+      "title": "Historial de ejecuciones",
+      "count_one": "{{count}} ejecución",
+      "count_other": "{{count}} ejecuciones",
+      "count": "{{count}} ejecución(es)",
+      "noEnvironment": "Sin ambiente",
+      "cases": "casos",
+      "backToList": "Volver al historial"
+    }
+  },
+  "tcTags": {
+    "label": "Tipo",
+    "addTag": "Etiquetar",
+    "removeTag": "Quitar etiqueta",
+    "filterLabel": "Ejecutar solo",
+    "smoke":       "Smoke",
+    "regression":  "Regresión",
+    "funcional":   "Funcional",
+    "exploratorio":"Exploratorio"
+  },
+  "checklist": {
+    "title": "Checklist de aprobación",
+    "subtitle": "Confirmá que se cumplieron todos los puntos antes de aprobar",
+    "testedStaging":        "Probé en ambiente de staging",
+    "mobileVerified":       "Verifiqué en dispositivo móvil",
+    "dbStateChecked":       "Revisé el estado de la base de datos",
+    "edgeCasesTested":      "Ejecuté los edge cases críticos",
+    "performanceOk":        "El rendimiento es aceptable",
+    "accessibilityOk":      "No hay regresiones de accesibilidad",
+    "extraNotes":           "Notas adicionales",
+    "extraNotesPlaceholder":"Observaciones finales…",
+    "allDone":              "✓ Todos los puntos completados — podés aprobar",
+    "pending":              "{{count}} punto(s) pendiente(s)"
+  },
+  "scoreTrend": {
+    "title": "Evolución de scores",
+    "subtitle": "{{count}} versiones disponibles",
+    "delta": "Cambio {{from}} → {{to}}"
+  },
+  "traceability": {
+    "button": "Trazabilidad",
+    "title": "Matriz de trazabilidad AC → TC",
+    "subtitle": "{{cas}} criterios · {{tcs}} casos de prueba",
+    "criteria": "Criterio de aceptación",
+    "coverage": "Cobertura",
+    "uncovered": "{{count}} sin cubrir",
+    "uncoveredHint": "{{count}} criterio(s) sin ningún test case asignado",
+    "allCovered": "Todos los criterios cubiertos",
+    "noCoverage": "Sin cobertura",
+    "save": "Guardar matriz",
+    "saved": "Trazabilidad guardada",
+    "empty": "Necesitás criterios de aceptación y test cases para usar esta vista"
+  },
+  "qaDashboard": {
+    "title": "Métricas QA",
+    "subtitle": "{{runs}} ejecución(es) · {{rate}}% pass rate",
+    "totalRuns": "Ejecuciones",
+    "passRate": "Pass rate",
+    "bugsFound": "Bugs",
+    "approved": "Aprobadas",
+    "storyStates": "Estado de historias",
+    "bugsBySeverity": "Bugs por severidad",
+    "exportedToJira": "{{count}} en Jira",
+    "recentRuns": "Últimas ejecuciones",
+    "coverageByModule": "Cobertura por módulo"
+  },
+  "offline": {
+    "message": "Sin conexión — verificá tu red o que el servidor esté corriendo."
+  },
+  "shortcuts": {
+    "title": "Atajos de teclado",
+    "showHelp": "Mostrar esta ayuda",
+    "focusSearch": "Enfocar búsqueda",
+    "analyzeStory": "Analizar historia",
+    "closeModal": "Cerrar modal",
+    "hint": "Los atajos funcionan cuando el foco no está en un campo de texto."
+  },
+  "jira": {
+    "importButton": "Importar de Jira",
+    "exportButton": "Exportar a Jira",
+    "modalImportTitle": "Importar historia desde Jira",
+    "modalExportTitle": "Exportar test cases a Jira",
+    "jiraUrl": "URL de Jira",
+    "jiraUrlPlaceholder": "https://miempresa.atlassian.net",
+    "email": "Email de Jira",
+    "emailPlaceholder": "tu@empresa.com",
+    "apiToken": "API Token",
+    "apiTokenPlaceholder": "Tu token de API de Atlassian",
+    "apiTokenHint": "Genera tu token en id.atlassian.com → Security → API tokens",
+    "issueKey": "Clave del issue",
+    "issueKeyPlaceholder": "PROJ-123",
+    "projectKey": "Clave del proyecto",
+    "projectKeyPlaceholder": "MYPROJ",
+    "issueType": "Tipo de issue",
+    "importBtn": "Importar",
+    "importing": "Importando…",
+    "exportBtn": "Exportar ({{count}})",
+    "exporting": "Exportando…",
+    "selectAll": "Seleccionar todos",
+    "deselectAll": "Deseleccionar todos",
+    "selected": "{{count}} seleccionados",
+    "noTestCases": "No hay test cases para exportar",
+    "importSuccess": "Historia importada desde {{key}}",
+    "exportedCount": "{{count}} issue(s) creados en Jira",
+    "errorsCount": "{{count}} error(es)",
+    "noSelection": "Selecciona al menos un test case",
+    "rememberCreds": "Recordar URL y email",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "httpWarning": "⚠ Usando HTTP — tu API token viajará sin cifrar. Usá HTTPS siempre que sea posible."
+  },
+  "copy": {
+    "label": "Copiar",
+    "copied": "Copiado",
+    "toast": {
+      "ok": "Copiado a portapapeles",
+      "error": "Error al copiar"
+    }
+  },
+  "export": {
+    "label": "Exportar",
+    "copyMd": "Copiar como Markdown",
+    "copyMdHint": "Pega en Confluence, Jira o Notion",
+    "downloadMd": "Descargar Markdown (.md)",
+    "downloadMdHint": "Archivo listo para versionar en git",
+    "downloadJson": "Descargar análisis (.json)",
+    "downloadJsonHint": "Objeto completo para debugging o integración",
+    "downloadCsv": "Descargar Test Cases (.csv)",
+    "downloadCsvHint": "Test cases + edge cases para Excel o Google Sheets",
+    "print": "Imprimir / Guardar como PDF",
+    "printHint": "Usa el diálogo de impresión del navegador",
+    "toast": {
+      "mdCopied": "Markdown copiado al portapapeles",
+      "mdDownloaded": "Markdown descargado",
+      "mdError": "No se pudo copiar",
+      "csvDownloaded": "CSV descargado ({{count}} casos)",
+      "csvEmpty": "No hay test cases ni edge cases para exportar",
+      "jsonDownloaded": "JSON descargado"
+    }
+  },
+  "toast": {
+    "analysisDone": "Análisis completado",
+    "analysisDoneIa": "Análisis completado · IA enriqueció {{count}} bloque{{plural}}",
+    "analysisDoneNoIa": "Análisis completado (IA no disponible: revisa ANTHROPIC_API_KEY en server/.env)",
+    "analysisError": "Error en análisis: {{message}}",
+    "versionChanged": "Versión cambiada",
+    "addRow": "Agregá la primera fila",
+    "addRowBtn": "Agregar fila",
+    "deleteRow": "Eliminar fila"
+  },
+  "inlineTable": {
+    "addRow": "Agregar fila",
+    "addRowHint": "Agregá la primera fila",
+    "deleteRow": "Eliminar fila"
+  },
+  "print": {
+    "appName": "QA Assist · Story Analyzer",
+    "untitled": "Historia sin título",
+    "warningRefinement": "⚠ Esta historia requiere refinamiento humano antes de pasar a desarrollo.",
+    "footer": "Generado por QA Assist",
+    "cover": {
+      "project": "Proyecto",
+      "version": "Versión",
+      "date": "Fecha",
+      "module": "Módulo"
+    },
+    "sections": {
+      "original": "Historia original",
+      "scores": "Scores",
+      "qualityChecks": "Quality Checks",
+      "structure": "Estructura detectada",
+      "classification": "Clasificación funcional",
+      "ambiguities": "Ambigüedades",
+      "questions": "Preguntas de refinamiento",
+      "criteria": "Criterios de aceptación",
+      "testExecution": "Reporte de ejecución QA",
+      "testcases": "Test Cases",
+      "edges": "Edge Cases / Negativos",
+      "risks": "Riesgos"
+    },
+    "fields": {
+      "actor": "Actor",
+      "action": "Acción",
+      "objective": "Objetivo",
+      "entities": "Entidades",
+      "integrations": "Integraciones",
+      "constraints": "Restricciones",
+      "roles": "Roles",
+      "primaryType": "Tipo primario",
+      "confidence": "Confianza",
+      "subtypes": "Subtipos",
+      "ambiguity": "Ambigüedad",
+      "coverage": "Cobertura",
+      "complexity": "Complejidad"
+    },
+    "tc": {
+      "preconditions": "Precondiciones",
+      "steps": "Pasos",
+      "expected": "Resultado esperado"
+    },
+    "empty": {
+      "ambiguities": "Sin ambigüedades detectadas.",
+      "questions": "Sin preguntas pendientes.",
+      "criteria": "Sin criterios.",
+      "testcases": "Sin test cases.",
+      "edges": "Sin edge cases identificados.",
+      "risks": "Sin riesgos identificados."
+    },
+    "checks": {
+      "cobertura_minima": "Cobertura mínima",
+      "casos_accionables": "Casos accionables",
+      "sin_supuestos_no_soportados": "Sin supuestos infundados",
+      "riesgos_relevantes": "Riesgos relevantes",
+      "sin_redundancia_excesiva": "Sin redundancia excesiva",
+      "preguntas_refinamiento_utiles": "Preguntas de refinamiento útiles"
+    }
+  }
+}

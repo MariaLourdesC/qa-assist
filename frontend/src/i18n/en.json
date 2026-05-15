@@ -1,0 +1,804 @@
+{
+  "header": {
+    "appName": "QA Assist",
+    "subtitle": "Story Analyzer · v1 MVP"
+  },
+  "footer": {
+    "label": "QA Assist · Local MVP"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "registerTitle": "Create account",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "At least 8 characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "loginBtn": "Sign in",
+    "registerBtn": "Create account",
+    "switchToRegister": "No account? Sign up",
+    "switchToLogin": "Already have an account? Sign in",
+    "forgotPassword": "Forgot your password?",
+    "loggingIn": "Signing in…",
+    "registering": "Creating account…",
+    "loginSubtitle": "Access your QA projects",
+    "registerSubtitle": "Start analyzing stories today",
+    "loggedInAs": "Signed in",
+    "logout": "Sign out",
+    "profile": "My profile",
+    "forgotTitle": "Reset password",
+    "forgotSubtitle": "We'll send you a link to reset your password.",
+    "forgotBtn": "Send",
+    "forgotSending": "Sending…",
+    "forgotSuccess": "If the email is registered, you'll receive instructions.",
+    "forgotDevToken": "Dev mode — reset token:",
+    "forgotDevHint": "Use this token on the reset page (no email sent in development).",
+    "backToLogin": "Back to login",
+    "resetTitle": "New password",
+    "resetSubtitle": "Enter your token and new password.",
+    "resetToken": "Reset token",
+    "resetTokenPlaceholder": "Paste the token here",
+    "newPassword": "New password",
+    "resetBtn": "Change password",
+    "resetting": "Changing…",
+    "resetSuccess": "Password changed. You can now sign in.",
+    "profileTitle": "My profile",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "What should we call you",
+    "displayNameHint": "Optional. Your email is shown if left empty.",
+    "saveProfile": "Save changes",
+    "savingProfile": "Saving…",
+    "profileSaved": "Profile updated",
+    "changePasswordTitle": "Change password",
+    "currentPassword": "Current password",
+    "newPasswordLabel": "New password",
+    "changePasswordBtn": "Change password",
+    "changingPassword": "Changing…",
+    "passwordChanged": "Password changed. Please sign in again.",
+    "accountSection": "Account",
+    "memberSince": "Member since",
+    "heroTitle": "Turn stories into actionable test plans.",
+    "heroSubtitle": "Automatic user story analysis for demanding QA teams.",
+    "featureAnalysis": "Structured story analysis in seconds",
+    "featureCoverage": "Detects ambiguities, risks and edge cases",
+    "featureLocal": "Local-only mode for sensitive data",
+    "localFirst": "Local-first by design",
+    "tabLogin": "Sign in",
+    "tabRegister": "Create account",
+    "withToken": "(with token)",
+    "termsNote": "By continuing you accept the product terms of use."
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "subtitle": "The app encountered an unexpected error. Reload the page to continue.",
+    "reload": "Reload the page",
+    "details": "Technical details"
+  },
+  "onboarding": {
+    "title": "Welcome to QA Assist!",
+    "subtitle": "Turn ambiguous stories into structured QA analysis.",
+    "step1Title": "Create a project",
+    "step1Desc": "Define the domain, glossary and business rules.",
+    "step2Title": "Capture a story",
+    "step2Desc": "Paste the story exactly as you received it from the PO.",
+    "step3Title": "Analyze and refine",
+    "step3Desc": "Get ambiguities, criteria, test cases and risks in seconds.",
+    "demoCta": "Create demo project",
+    "demoLoading": "Creating demo…",
+    "skip": "Start from scratch",
+    "demoCreated": "Demo project created",
+    "demoError": "Could not create demo: {{message}}"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading…",
+    "saving": "Saving…",
+    "analyzing": "Analyzing…",
+    "optional": "(optional)",
+    "required": "*",
+    "noData": "No data"
+  },
+  "themeToggle": {
+    "toLight": "Switch to light theme",
+    "toDark": "Switch to dark theme"
+  },
+  "languageToggle": {
+    "label": "Language",
+    "switchToEn": "Switch to English",
+    "switchToEs": "Switch to Spanish"
+  },
+  "projects": {
+    "title": "Projects",
+    "create": "Create project",
+    "emptyTitle": "No projects yet",
+    "emptyDesc": "Create your first project to start analyzing stories and generating QA reports.",
+    "emptyAction": "Create first project",
+    "loading": "Loading projects...",
+    "searchPlaceholder": "Search by name, domain or description…",
+    "clearSearch": "Clear search",
+    "noMatches": "No matches for \"{{query}}\"",
+    "matching_one": "{{count}} of {{total}}",
+    "matching_other": "{{count}} of {{total}}",
+    "card": {
+      "noDescription": "No description",
+      "analyze": "Analyze"
+    },
+    "form": {
+      "createTitle": "New project",
+      "editTitle": "Edit project",
+      "createSubtitle": "Create a project to start analyzing stories",
+      "editSubtitle": "Update the project information and context",
+      "sectionIdentity": "Identity",
+      "sectionContext": "Description and context",
+      "sectionGlossary": "Glossary",
+      "sectionRules": "Business rules",
+      "name": "Name",
+      "namePlaceholder": "Ex: Digital Banking",
+      "domain": "Domain",
+      "domainPlaceholder": "Ex: Finance",
+      "sensitivity": "Sensitivity",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief project summary",
+      "contextGeneral": "General context",
+      "contextPlaceholder": "Audience, scope, business constraints…",
+      "contextHint": "Helps the analysis interpret stories within the right domain.",
+      "glossaryDesc": "Domain terms and their definitions",
+      "rulesDesc": "Restrictions and policies that apply to the product",
+      "createBtn": "Create project",
+      "updateBtn": "Update project",
+      "restrictedTitle": "Restricted project",
+      "restrictedDesc": "Hybrid (AI) analysis will be blocked. Only local analysis is allowed for this project's stories."
+    },
+    "sensitivity": {
+      "publico": "Public",
+      "interno": "Internal",
+      "sensible": "Sensitive",
+      "restringido": "Restricted",
+      "publico_desc": "No exposure restrictions",
+      "interno_desc": "Only inside the organization",
+      "sensible_desc": "Critical data, handle with care",
+      "restringido_desc": "AI blocked — local analysis only"
+    },
+    "deleteConfirm": "Delete project \"{{name}}\"?",
+    "toast": {
+      "created": "Project \"{{name}}\" created",
+      "updated": "Project \"{{name}}\" updated",
+      "deleted": "Project \"{{name}}\" deleted"
+    }
+  },
+  "duplicates": {
+    "warning_one": "We found 1 similar story in this project",
+    "warning_other": "We found {{count}} similar stories in this project",
+    "similar": "{{score}}% similar",
+    "viewAndLoad": "Load"
+  },
+  "templates": {
+    "applyButton": "Apply template",
+    "applied": "Template \"{{name}}\" applied",
+    "menuTitle": "Domain templates",
+    "customSection": "My templates",
+    "builtinSection": "Built-in templates",
+    "preview": "Adds {{glossary}} glossary terms and {{rules}} business rules.",
+    "saveFromProject": "Save project as template",
+    "saveModal": "Template name",
+    "saveModalPlaceholder": "e.g. My banking template",
+    "saveBtn": "Save",
+    "savingBtn": "Saving…",
+    "savedOk": "Template saved",
+    "deleteConfirm": "Delete template \"{{name}}\"?",
+    "deletedOk": "Template deleted",
+    "editModal": "Edit template",
+    "noCustom": "You haven't saved any templates yet.",
+    "domains": {
+      "banking":     "Banking · Financial services",
+      "ecommerce":   "E-commerce · Online retail",
+      "healthcare":  "Healthcare",
+      "saas":        "SaaS · Multi-tenant",
+      "education":   "Education · EdTech",
+      "logistics":   "Logistics · Supply chain"
+    }
+  },
+  "story": {
+    "newTitle": "New story",
+    "newSubtitle": "Capture the story to start the analysis",
+    "reanalyzeTitle": "Re-analyze story",
+    "reanalyzeSubtitle": "Modify the content and generate version v{{version}}",
+    "fields": {
+      "titulo": "Title",
+      "tituloPlaceholder": "Ex: Transfer between own accounts",
+      "tituloError": "Title is required",
+      "modulo": "Module",
+      "moduloPlaceholder": "Ex: Mobile banking",
+      "descripcion": "Description",
+      "descripcionPlaceholder": "As a customer I want…",
+      "descripcionError": "Description is required",
+      "descripcionTooLong": "Description exceeds the {{max}} character limit. Shorten it to run the analysis.",
+    "descripcionHint":"Paste the story exactly as you received it from the PO.",
+      "fuente": "Source",
+      "fuentePlaceholder": "Ex: Jira KEY-1234, Confluence, Meeting Apr 28",
+      "notasQa": "QA notes",
+      "notasQaPlaceholder": "Extra context, cases to consider, assumptions…"
+    },
+    "actions": {
+      "analyze": "Analyze story",
+      "reanalyze": "Re-analyze (v{{version}})",
+      "newStory": "New story"
+    }
+  },
+  "rewrite": {
+    "label": "Improve story",
+    "title": "Improvement suggestion",
+    "generating": "Generating suggestion…",
+    "errorTitle": "Could not generate suggestion",
+    "original": "Original story",
+    "improved": "Improved story (AI)",
+    "changes": "What changed and why",
+    "useVersion": "Use this version",
+    "close": "Close",
+    "noApiKey": "Hybrid mode unavailable (missing API key). Enable Hybrid mode.",
+    "applied": "Improved story loaded in the form",
+    "changesCount_one": "{{count}} change",
+    "changesCount_other": "{{count}} changes"
+  },
+  "compare": {
+    "label": "Compare",
+    "title": "Compare versions",
+    "leftVersion": "Base version",
+    "rightVersion": "Compared version",
+    "summary": "{{added}} added · {{removed}} removed · {{unchanged}} unchanged",
+    "added": "Added",
+    "removed": "Removed",
+    "unchanged": "Unchanged",
+    "noChanges": "No differences in this block.",
+    "blocks": {
+      "ambiguedades": "Ambiguities",
+      "preguntas_refinamiento": "Questions",
+      "criterios_aceptacion": "Criteria",
+      "test_cases": "Test Cases",
+      "negativos_edge_cases": "Edge Cases",
+      "riesgos": "Risks"
+    },
+    "needTwoVersions": "You need at least 2 versions to compare.",
+    "close": "Close"
+  },
+  "feedbackHistory": {
+    "label": "View previous feedback",
+    "title": "Feedback received",
+    "loading": "Loading feedback…",
+    "empty": "No feedback on any version yet.",
+    "versionLabel": "v{{version}}",
+    "noComment": "(no comment)",
+    "close": "Close"
+  },
+  "stats": {
+    "title": "Project summary",
+    "stories_one": "Story",
+    "stories_other": "Stories",
+    "analyzed": "Analyzed",
+    "drafts": "Drafts",
+    "totalAnalyses": "Total analyses",
+    "avgAmb": "Avg ambiguity",
+    "avgCob": "Avg coverage",
+    "avgCompl": "Avg complexity",
+    "needsRefinement": "Need refinement",
+    "noData": "No analyses yet",
+    "loading": "Calculating…"
+  },
+  "history": {
+    "title": "Story history",
+    "loading": "Loading…",
+    "empty": "No stories yet",
+    "count_one": "{{count}} story in this project",
+    "count_other": "{{count}} stories in this project",
+    "matching_one": "{{count}} of {{total}}",
+    "matching_other": "{{count}} of {{total}}",
+    "searchPlaceholder": "Search by title or module…",
+    "clearSearch": "Clear search",
+    "noMatches": "No matches for \"{{query}}\"",
+    "noStories": "No stories created in this project yet.",
+    "showMore": "Show {{count}} more ({{total}} remaining)",
+    "filter": {
+      "all":        "All",
+      "draft":      "Drafts",
+      "analyzed":   "Analyzed",
+      "in_testing": "In testing",
+      "passed":     "Passed",
+      "failed":     "Failed",
+      "approved":   "Approved"
+    },
+    "sort": {
+      "recent": "Recent",
+      "oldest": "Oldest",
+      "az": "A → Z"
+    },
+    "estado": {
+      "draft":      "Draft",
+      "analyzed":   "Analyzed",
+      "in_testing": "In testing",
+      "passed":     "QA passed",
+      "failed":     "QA failed",
+      "approved":   "Approved"
+    },
+    "active": "Active",
+    "updatedAt": "Updated {{date}}",
+    "deleteConfirm": "Delete story \"{{title}}\" and all its analyses?",
+    "toast": {
+      "loaded": "Story \"{{title}}\" loaded",
+      "deleted": "Story \"{{title}}\" deleted",
+      "loadError": "Error loading history: {{message}}"
+    }
+  },
+  "analysisMode": {
+    "title": "Analysis mode",
+    "subtitle": "Choose how to process the story",
+    "localOnly": "Local only",
+    "localOnlyDesc": "100% local analysis, no data sent to external services.",
+    "hybrid": "Hybrid (AI)",
+    "hybridDesc": "Enriches the local analysis with an external model.",
+    "blockedTitle": "Hybrid mode blocked",
+    "blockedDesc": "This project is marked as restricted. Only local analysis is allowed.",
+    "iaBlocksTitle": "Blocks enriched by AI",
+    "iaBlocks": {
+      "ambiguities": "Additional ambiguities",
+      "questions": "Refinement questions",
+      "risks": "Non-obvious risks",
+      "edges": "Edge cases"
+    }
+  },
+  "feedback": {
+    "title": "How useful was this analysis?",
+    "subtitle": "Your feedback helps calibrate the tool",
+    "options": {
+      "muy_util": "Very useful",
+      "muy_util_desc": "Ready to use",
+      "util": "Useful",
+      "util_desc": "Works with tweaks",
+      "poco_util": "Hardly useful",
+      "poco_util_desc": "Needs rework",
+      "inutil": "Useless",
+      "inutil_desc": "No value"
+    },
+    "comment": "Comment",
+    "commentPlaceholder": "Anything to improve or highlight?",
+    "save": "Save feedback",
+    "saving": "Saving…",
+    "savedBtn": "Saved",
+    "prevLoaded": "Previous response",
+    "copy": "Copy feedback",
+    "toast": {
+      "saved": "Feedback saved",
+      "error": "Error: {{message}}"
+    }
+  },
+  "results": {
+    "placeholder": "Enter a story and click \"Analyze\"",
+    "requiresRefinement": "⚠️ Refinement required",
+    "ambiguityLabel": "Ambiguity: {{score}}/100. Send back to PO for refinement.",
+    "version": "Version",
+    "versionsCount_one": "{{count}} version",
+    "versionsCount_other": "{{count}} versions",
+    "scores": {
+      "amb": "Amb",
+      "cob": "Cov",
+      "compl": "Compl"
+    },
+    "langChip": "Language",
+    "fromCache": "Cached",
+    "fromCacheTitle": "AI result served from cache — Claude was not called"
+  },
+  "versions": {
+    "deleteLabel": "Delete this version",
+    "deleteConfirm": "Delete {{version}}? This analysis cannot be recovered.",
+    "deleted": "{{version}} deleted"
+  },
+  "analysisModeShort": {
+    "local_only": "Local",
+    "hybrid": "Hybrid"
+  },
+  "tipos": {
+    "formulario": "form",
+    "autenticacion": "authentication",
+    "crud": "CRUD",
+    "transaccion": "transaction",
+    "desconocido": "unknown"
+  },
+  "tabs": {
+    "structure": "Structure",
+    "classification": "Classification",
+    "ambiguities": "Ambiguities",
+    "questions": "Questions",
+    "criteria": "Criteria",
+    "testcases": "Test Cases",
+    "edges": "Edge Cases",
+    "risks": "Risks",
+    "quality": "Quality Checks",
+    "scores": "Scores"
+  },
+  "panels": {
+    "structure": {
+      "actor": "Actor",
+      "action": "Action",
+      "objective": "Objective",
+      "notDetected": "Not detected",
+      "entities": "Detected entities",
+      "integrations": "Detected integrations",
+      "constraints": "Detected constraints",
+      "roles": "Detected roles",
+      "bddBadge": "Gherkin/BDD detected",
+      "scenariosTitle": "Detected scenarios",
+      "outlineBadge": "Outline",
+      "given": "Given",
+      "when": "When",
+      "then": "Then",
+      "background": "Background",
+      "examples": "Examples",
+      "tablesTitle": "Data tables"
+    },
+    "classification": {
+      "primaryType": "Primary type",
+      "notDetermined": "Not determined",
+      "confidence": "Confidence",
+      "confidenceHigh": "High",
+      "confidenceMedium": "Medium",
+      "confidenceLow": "Low",
+      "subtypes": "Subtypes"
+    },
+    "ambiguities": {
+      "emptyTitle": "No ambiguities detected",
+      "emptyDesc": "The story is interpreted clearly."
+    },
+    "questions": {
+      "emptyTitle": "No pending questions",
+      "emptyDesc": "No clarifications required from the product team."
+    },
+    "criteria": {
+      "emptyTitle": "No acceptance criteria",
+      "emptyDesc": "No criteria have been generated for this story yet."
+    },
+    "testcases": {
+      "emptyTitle": "No test cases generated",
+      "emptyDesc": "No test cases have been generated yet.",
+      "preconditions": "Preconditions",
+      "steps": "Steps",
+      "expected": "Expected result"
+    },
+    "edges": {
+      "emptyTitle": "No edge cases identified",
+      "emptyDesc": "No negative cases detected for this story."
+    },
+    "risks": {
+      "emptyTitle": "No risks identified",
+      "emptyDesc": "No relevant risks were detected in the analysis."
+    },
+    "quality": {
+      "checks": {
+        "cobertura_minima": "Minimum coverage",
+        "cobertura_minima_desc": "The criteria cover the main flows of the story.",
+        "casos_accionables": "Actionable cases",
+        "casos_accionables_desc": "Test cases have executable and verifiable steps.",
+        "sin_supuestos_no_soportados": "No unsupported assumptions",
+        "sin_supuestos_no_soportados_desc": "Analysis claims are grounded in the story text.",
+        "riesgos_relevantes": "Relevant risks",
+        "riesgos_relevantes_desc": "Identified risks are pertinent to the scope.",
+        "sin_redundancia_excesiva": "No redundancy",
+        "sin_redundancia_excesiva_desc": "No significant duplication across analysis items.",
+        "preguntas_refinamiento_utiles": "Useful questions",
+        "preguntas_refinamiento_utiles_desc": "Questions help clarify the detected ambiguities."
+      },
+      "refinementTitle": "This story requires human refinement",
+      "refinementDesc": "Before development, review the pending ambiguities and questions with the product team.",
+      "readyTitle": "Ready to refine with the team",
+      "readyDesc": "Analysis did not detect critical blockers to move forward to backlog."
+    },
+    "scores": {
+      "amb": "Ambiguity",
+      "cob": "Coverage",
+      "compl": "Complexity",
+      "interpretation": "Combined interpretation",
+      "ambHigh": "Ambiguity is high: the story requires clarification before implementation.",
+      "ambMedium": "Ambiguity is moderate: review the suggested refinement questions.",
+      "ambLow": "Ambiguity is low: the story is interpreted clearly.",
+      "covHigh": "Coverage is solid: the criteria capture the key scenarios.",
+      "covMedium": "Coverage is partial: supplement with negative and edge cases.",
+      "covLow": "Coverage is insufficient: criteria and cases are missing.",
+      "compHigh": "Complexity is high: consider splitting the story into smaller pieces.",
+      "compLow": "Complexity is manageable for a standard iteration."
+    }
+  },
+  "badges": {
+    "severity": {
+      "alta": "High",
+      "media": "Medium",
+      "baja": "Low"
+    },
+    "origin": {
+      "local": "Local",
+      "ia": "AI",
+      "mixto": "Mixed"
+    }
+  },
+  "execution": {
+    "runButton": "Run tests",
+    "title": "Test execution",
+    "subtitle": "{{count}} test cases to run",
+    "environment": "Environment",
+    "environmentPlaceholder": "e.g. staging, v2.3.1, prod",
+    "start": "Start execution",
+    "running": "Execution in progress",
+    "progress": "{{done}} / {{total}} completed",
+    "bugsCount": "{{count}} bug(s) found",
+    "finalize": "Finalize and view summary",
+    "cancel": "Cancel",
+    "exit": "Exit without finalizing",
+    "status": {
+      "pass": "Passed",
+      "fail": "Failed",
+      "blocked": "Blocked",
+      "skip": "Skip",
+      "pending": "Pending"
+    },
+    "bugReport": "Bug report",
+    "bugTitle": "Bug title",
+    "bugActual": "Actual result (what happened)",
+    "bugActualPlaceholder": "Describe what happened instead of the expected result…",
+    "bugSeverity": "Severity",
+    "bugEnvironment": "Environment",
+    "bugScreenshot": "Evidence URL / screenshot",
+    "severity": {
+      "critica": "Critical",
+      "alta": "High",
+      "media": "Medium",
+      "baja": "Low"
+    },
+    "summaryTitle": "Execution summary",
+    "date": "Date",
+    "results": "Results",
+    "bugsFound": "Bugs found",
+    "exportBugsJira": "Export {{count}} bug(s) to Jira",
+    "exportBugsBtn": "Export {{count}} bug(s)",
+    "exportJiraTitle": "Jira credentials",
+    "bugsExported": "{{count}} bug(s) exported to Jira",
+    "bugsErrors": "{{count}} error(s) while exporting",
+    "copyMd": "Copy as Markdown",
+    "copiedMd": "Report copied to clipboard",
+    "copyError": "Could not copy",
+    "newRun": "New run",
+    "backToTcs": "Back to test cases",
+    "sectionTc": "Test Cases ({{count}})",
+    "sectionEc": "Edge Cases / Negatives ({{count}})",
+    "approveBtn": "Approve story",
+    "approved": "Story approved ✓",
+    "approvedOk": "Story marked as approved",
+    "retest": "Re-test {{count}} failure(s)",
+    "bugStatusUpdated": "Bug status updated",
+    "bugNotes": "Internal notes",
+    "bugNotesPlaceholder": "Observations, context, additional steps…",
+    "bugStatus": {
+      "open":      "Open",
+      "fixed":     "Fixed",
+      "verified":  "Verified",
+      "wont_fix":  "Won't fix",
+      "duplicate": "Duplicate"
+    },
+    "history": {
+      "title": "Execution history",
+      "count": "{{count}} execution(s)",
+      "count_one": "{{count}} execution",
+      "count_other": "{{count}} executions",
+      "noEnvironment": "No environment",
+      "cases": "cases",
+      "backToList": "Back to list"
+    }
+  },
+  "tcTags": {
+    "label": "Type",
+    "addTag": "Tag",
+    "removeTag": "Remove tag",
+    "filterLabel": "Run only",
+    "smoke":       "Smoke",
+    "regression":  "Regression",
+    "funcional":   "Functional",
+    "exploratorio":"Exploratory"
+  },
+  "checklist": {
+    "title": "Approval checklist",
+    "subtitle": "Confirm all points before approving",
+    "testedStaging":        "Tested on staging environment",
+    "mobileVerified":       "Verified on mobile device",
+    "dbStateChecked":       "Checked database state",
+    "edgeCasesTested":      "Ran critical edge cases",
+    "performanceOk":        "Performance is acceptable",
+    "accessibilityOk":      "No accessibility regressions",
+    "extraNotes":           "Additional notes",
+    "extraNotesPlaceholder":"Final observations…",
+    "allDone":              "✓ All points completed — you can approve",
+    "pending":              "{{count}} point(s) pending"
+  },
+  "scoreTrend": {
+    "title": "Score evolution",
+    "subtitle": "{{count}} versions available",
+    "delta": "Change {{from}} → {{to}}"
+  },
+  "traceability": {
+    "button": "Traceability",
+    "title": "Traceability matrix AC → TC",
+    "subtitle": "{{cas}} criteria · {{tcs}} test cases",
+    "criteria": "Acceptance criterion",
+    "coverage": "Coverage",
+    "uncovered": "{{count}} uncovered",
+    "uncoveredHint": "{{count}} criterion/criteria with no test case assigned",
+    "allCovered": "All criteria covered",
+    "noCoverage": "No coverage",
+    "save": "Save matrix",
+    "saved": "Traceability saved",
+    "empty": "You need acceptance criteria and test cases to use this view"
+  },
+  "qaDashboard": {
+    "title": "QA Metrics",
+    "subtitle": "{{runs}} run(s) · {{rate}}% pass rate",
+    "totalRuns": "Runs",
+    "passRate": "Pass rate",
+    "bugsFound": "Bugs",
+    "approved": "Approved",
+    "storyStates": "Story states",
+    "bugsBySeverity": "Bugs by severity",
+    "exportedToJira": "{{count}} in Jira",
+    "recentRuns": "Recent runs",
+    "coverageByModule": "Coverage by module"
+  },
+  "offline": {
+    "message": "No connection — check your network or make sure the server is running."
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "showHelp": "Show this help",
+    "focusSearch": "Focus search",
+    "analyzeStory": "Analyze story",
+    "closeModal": "Close modal",
+    "hint": "Shortcuts work when focus is not inside a text field."
+  },
+  "jira": {
+    "importButton": "Import from Jira",
+    "exportButton": "Export to Jira",
+    "modalImportTitle": "Import story from Jira",
+    "modalExportTitle": "Export test cases to Jira",
+    "jiraUrl": "Jira URL",
+    "jiraUrlPlaceholder": "https://mycompany.atlassian.net",
+    "email": "Jira email",
+    "emailPlaceholder": "you@company.com",
+    "apiToken": "API Token",
+    "apiTokenPlaceholder": "Your Atlassian API token",
+    "apiTokenHint": "Generate your token at id.atlassian.com → Security → API tokens",
+    "issueKey": "Issue key",
+    "issueKeyPlaceholder": "PROJ-123",
+    "projectKey": "Project key",
+    "projectKeyPlaceholder": "MYPROJ",
+    "issueType": "Issue type",
+    "importBtn": "Import",
+    "importing": "Importing…",
+    "exportBtn": "Export ({{count}})",
+    "exporting": "Exporting…",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
+    "selected": "{{count}} selected",
+    "noTestCases": "No test cases to export",
+    "importSuccess": "Story imported from {{key}}",
+    "exportedCount": "{{count}} issue(s) created in Jira",
+    "errorsCount": "{{count}} error(s)",
+    "noSelection": "Select at least one test case",
+    "rememberCreds": "Remember URL and email",
+    "cancel": "Cancel",
+    "close": "Close",
+    "httpWarning": "⚠ Using HTTP — your API token will travel unencrypted. Use HTTPS whenever possible."
+  },
+  "copy": {
+    "label": "Copy",
+    "copied": "Copied",
+    "toast": {
+      "ok": "Copied to clipboard",
+      "error": "Copy failed"
+    }
+  },
+  "export": {
+    "label": "Export",
+    "copyMd": "Copy as Markdown",
+    "copyMdHint": "Paste into Confluence, Jira or Notion",
+    "downloadMd": "Download Markdown (.md)",
+    "downloadMdHint": "File ready to version in git",
+    "downloadJson": "Download analysis (.json)",
+    "downloadJsonHint": "Full object for debugging or integration",
+    "downloadCsv": "Download Test Cases (.csv)",
+    "downloadCsvHint": "Test cases + edge cases for Excel or Google Sheets",
+    "print": "Print / Save as PDF",
+    "printHint": "Uses the browser's print dialog",
+    "toast": {
+      "mdCopied": "Markdown copied to clipboard",
+      "mdDownloaded": "Markdown downloaded",
+      "mdError": "Could not copy",
+      "csvDownloaded": "CSV downloaded ({{count}} cases)",
+      "csvEmpty": "No test cases or edge cases to export",
+      "jsonDownloaded": "JSON downloaded"
+    }
+  },
+  "toast": {
+    "analysisDone": "Analysis completed",
+    "analysisDoneIa": "Analysis completed · AI enriched {{count}} block{{plural}}",
+    "analysisDoneNoIa": "Analysis completed (AI unavailable: check ANTHROPIC_API_KEY in server/.env)",
+    "analysisError": "Analysis error: {{message}}",
+    "versionChanged": "Version changed",
+    "addRow": "Add the first row",
+    "addRowBtn": "Add row",
+    "deleteRow": "Delete row"
+  },
+  "inlineTable": {
+    "addRow": "Add row",
+    "addRowHint": "Add the first row",
+    "deleteRow": "Delete row"
+  },
+  "print": {
+    "appName": "QA Assist · Story Analyzer",
+    "untitled": "Untitled story",
+    "warningRefinement": "⚠ This story requires human refinement before moving to development.",
+    "footer": "Generated by QA Assist",
+    "cover": {
+      "project": "Project",
+      "version": "Version",
+      "date": "Date",
+      "module": "Module"
+    },
+    "sections": {
+      "original": "Original story",
+      "scores": "Scores",
+      "qualityChecks": "Quality Checks",
+      "structure": "Detected structure",
+      "classification": "Functional classification",
+      "ambiguities": "Ambiguities",
+      "questions": "Refinement questions",
+      "criteria": "Acceptance criteria",
+      "testExecution": "QA Execution Report",
+      "testcases": "Test Cases",
+      "edges": "Edge Cases / Negatives",
+      "risks": "Risks"
+    },
+    "fields": {
+      "actor": "Actor",
+      "action": "Action",
+      "objective": "Objective",
+      "entities": "Entities",
+      "integrations": "Integrations",
+      "constraints": "Constraints",
+      "roles": "Roles",
+      "primaryType": "Primary type",
+      "confidence": "Confidence",
+      "subtypes": "Subtypes",
+      "ambiguity": "Ambiguity",
+      "coverage": "Coverage",
+      "complexity": "Complexity"
+    },
+    "tc": {
+      "preconditions": "Preconditions",
+      "steps": "Steps",
+      "expected": "Expected result"
+    },
+    "empty": {
+      "ambiguities": "No ambiguities detected.",
+      "questions": "No pending questions.",
+      "criteria": "No criteria.",
+      "testcases": "No test cases.",
+      "edges": "No edge cases identified.",
+      "risks": "No risks identified."
+    },
+    "checks": {
+      "cobertura_minima": "Minimum coverage",
+      "casos_accionables": "Actionable cases",
+      "sin_supuestos_no_soportados": "No unsupported assumptions",
+      "riesgos_relevantes": "Relevant risks",
+      "sin_redundancia_excesiva": "No excessive redundancy",
+      "preguntas_refinamiento_utiles": "Useful refinement questions"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+Como cliente bancario quiero transferir dinero entre mis cuentas para revisar mi saldo actualizado.
+El sistema debe validar el monto y mostrar un error si el saldo es insuficiente.
+Maximo de 5 intentos fallidos antes de bloquear la cuenta.
+Tiempo de respuesta maximo 500ms.

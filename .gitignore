@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment — NUNCA commitear
+.env
+.env.local
+.env.*.local
+
+# Build output
+frontend/dist/
+frontend/.vite/
+
+# SQLite database
+server/data/
+server/backups/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Docker
+docker-compose.override.yml

@@ -1,0 +1,4 @@
+As a banking customer I want to transfer money between my accounts quickly and efficiently so that I can see my updated balance.
+The system must validate the amount and show an error if the balance is insufficient.
+Maximum of 5 failed attempts before locking the account.
+Response time must be under 500ms.

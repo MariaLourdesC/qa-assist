@@ -1,0 +1,83 @@
+name: CD — Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+# Solo un deploy a la vez — no cancelar el en curso si llega otro push
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  # ── Resumen del cambio (se muestra en la pantalla de aprobación) ──────────
+  preview:
+    name: Resumen del cambio
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Commits incluidos en este deploy
+        run: |
+          echo "### Commits a deployar" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          git log --oneline -10 --pretty="| \`%h\` | %s | %an |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+
+  # ── Deploy real (requiere aprobación manual en environment "production") ──
+  deploy:
+    name: Deploy a producción
+    needs: preview
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.APP_URL }}    # se muestra como link en la UI de aprobación
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host:     ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key:      ${{ secrets.VPS_SSH_KEY }}
+          port:     ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -e
+            cd ${{ secrets.VPS_PATH }}
+
+            echo "=== Pull ==="
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "=== Build ==="
+            docker compose build
+
+            echo "=== Deploy ==="
+            docker compose up -d --remove-orphans
+
+            echo "=== Healthcheck ==="
+            sleep 8
+            STATUS=$(docker compose exec -T backend wget -qO- http://localhost:3001/api/health)
+            echo "$STATUS"
+            echo "$STATUS" | grep -q '"status":"ok"' || exit 1
+
+            echo "=== Cleanup ==="
+            docker image prune -f
+
+      - name: Resumen del deploy
+        run: |
+          echo "## ✅ Deploy exitoso" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Servidor | \`${{ secrets.VPS_HOST }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Aprobado por | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Fecha | $(date '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
