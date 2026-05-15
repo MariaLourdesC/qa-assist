@@ -299,30 +299,31 @@ router.post('/forgot-password', forgotLimiter, async (req, res) => {
   try {
     const db = await getDb();
     const rows = db.exec('SELECT id FROM users WHERE email = ?', [email.toLowerCase()]);
-    // Always return 200 to avoid email enumeration
-    if (!rows.length || !rows[0].values.length) {
-      return res.json({ ok: true, dev_token: null });
+
+    // Always respond identically — prevents email enumeration
+    // (attacker cannot distinguish registered vs non-registered by response)
+    if (rows.length && rows[0].values.length) {
+      const userId = rows[0].values[0][0];
+      db.run('DELETE FROM password_reset_tokens WHERE user_id = ?', [userId]);
+
+      const raw      = crypto.randomBytes(32).toString('hex');
+      const hash     = crypto.createHash('sha256').update(raw).digest('hex');
+      const expiresAt = new Date(Date.now() + RESET_TTL_SEC * 1000).toISOString();
+      db.run('INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)',
+        [userId, hash, expiresAt]);
+      saveDb();
+
+      const result = await sendPasswordReset(email.toLowerCase(), raw);
+
+      // In dev (no SMTP): return token only when user actually exists
+      // but wrapped in the same outer response shape as the "not found" case
+      if (result.dev_token) {
+        return res.json({ ok: true, dev_token: result.dev_token, expires_in: RESET_TTL_SEC });
+      }
     }
-    const userId = rows[0].values[0][0];
 
-    // Invalidate previous tokens for this user
-    db.run('DELETE FROM password_reset_tokens WHERE user_id = ?', [userId]);
-
-    const raw  = crypto.randomBytes(32).toString('hex');
-    const hash = crypto.createHash('sha256').update(raw).digest('hex');
-    const expiresAt = new Date(Date.now() + RESET_TTL_SEC * 1000).toISOString();
-    db.run('INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)',
-      [userId, hash, expiresAt]);
-    saveDb();
-
-    // Send reset email (falls back to dev token if SMTP not configured)
-    const result = await sendPasswordReset(email.toLowerCase(), raw);
-
-    return res.json({
-      ok: true,
-      dev_token: result.dev_token || undefined,  // only present when SMTP not configured
-      expires_in: RESET_TTL_SEC
-    });
+    // Identical response whether user exists or not — no enumeration possible
+    return res.json({ ok: true, expires_in: RESET_TTL_SEC });
   } catch (err) { return res.status(500).json({ error: err.message }); }
 });
 

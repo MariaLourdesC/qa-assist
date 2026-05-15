@@ -7,6 +7,9 @@ const requestLogger  = require('./middleware/requestLogger');
 
 const app = express();
 
+// ── Remove framework fingerprint ──────────────────────────────────────────
+app.disable('x-powered-by');
+
 // ── CORS — validate CORS_ORIGIN is set in production ─────────────────────
 if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGIN) {
   rootLogger.error('CORS_ORIGIN must be set in production. Refusing to start.');
