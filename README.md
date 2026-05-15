@@ -17,7 +17,7 @@ Sistema de análisis de historias de usuario y gestión del ciclo QA completo.
 
 | Capa | Tecnología |
 |------|------------|
-| Backend | Node.js 20 + Express + sql.js (SQLite) |
+| Backend | Node.js 24 + Express + sql.js (SQLite) |
 | Frontend | React 18 + Vite + Tailwind CSS |
 | Auth | JWT (httpOnly cookies, 15min access + 7d refresh) |
 | AI | Anthropic Claude (opcional, modo híbrido) |
@@ -29,7 +29,7 @@ Sistema de análisis de historias de usuario y gestión del ciclo QA completo.
 
 ### Prerequisitos
 
-- Node.js 20+
+- Node.js 24+
 - npm 9+
 
 ### Setup
