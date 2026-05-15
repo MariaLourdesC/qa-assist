@@ -77,11 +77,26 @@ const loginLimiter = rateLimit({
 });
 
 const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
+  windowMs: 60 * 60 * 1000,
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many accounts created from this IP. Try again in an hour.' }
+});
+
+const forgotLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many reset attempts. Try again in 15 minutes.' }
+});
+
+const changePwLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many password changes. Try again in an hour.' }
+});
+
+const profileLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many profile updates. Try again in an hour.' }
 });
 
 // ── POST /auth/register ───────────────────────────────────────────────────
@@ -276,13 +291,6 @@ router.post('/change-password', authenticate, changePwLimiter, async (req, res) 
 // ── POST /auth/forgot-password ────────────────────────────────────────────
 // In dev (NODE_ENV !== 'production'): returns token directly.
 // In prod: configure SMTP and send email instead.
-
-const forgotLimiter    = rateLimit({ windowMs: 15 * 60 * 1000, max: 5,  standardHeaders: true, legacyHeaders: false,
-  message: { error: 'Too many reset attempts. Try again in 15 minutes.' } });
-const changePwLimiter  = rateLimit({ windowMs: 60 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false,
-  message: { error: 'Too many password changes. Try again in an hour.' } });
-const profileLimiter   = rateLimit({ windowMs: 60 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false,
-  message: { error: 'Too many profile updates. Try again in an hour.' } });
 
 router.post('/forgot-password', forgotLimiter, async (req, res) => {
   const { email } = req.body || {};
