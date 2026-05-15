@@ -4,13 +4,15 @@ on:
   push:
     branches: [main]
 
-# Solo un deploy a la vez — no cancelar el en curso si llega otro push
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: production
   cancel-in-progress: false
 
 jobs:
-  # ── Resumen del cambio (se muestra en la pantalla de aprobación) ──────────
+  # ── Resumen del cambio ────────────────────────────────────────────────────
   preview:
     name: Resumen del cambio
     runs-on: ubuntu-latest
@@ -23,20 +25,54 @@ jobs:
         run: |
           echo "### Commits a deployar" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Hash | Mensaje | Autor |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|---------|-------|" >> $GITHUB_STEP_SUMMARY
           git log --oneline -10 --pretty="| \`%h\` | %s | %an |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\` · **Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
 
-  # ── Deploy real (requiere aprobación manual en environment "production") ──
+  # ── Verificar que los secrets del VPS están configurados ─────────────────
+  check-secrets:
+    name: Verificar secrets del VPS
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - name: Verificar secrets
+        id: check
+        env:
+          HAS_HOST: ${{ secrets.VPS_HOST != '' }}
+          HAS_USER: ${{ secrets.VPS_USER != '' }}
+          HAS_KEY:  ${{ secrets.VPS_SSH_KEY != '' }}
+          HAS_PATH: ${{ secrets.VPS_PATH != '' }}
+        run: |
+          if [[ "$HAS_HOST" == "true" && "$HAS_USER" == "true" && "$HAS_KEY" == "true" && "$HAS_PATH" == "true" ]]; then
+            echo "ready=true" >> $GITHUB_OUTPUT
+            echo "✅ Todos los secrets del VPS están configurados." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ready=false" >> $GITHUB_OUTPUT
+            echo "## ⚠️ Deploy saltado — secrets no configurados" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Para activar el deploy automático, configurá estos secrets en:" >> $GITHUB_STEP_SUMMARY
+            echo "**Settings → Secrets → Actions**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Secret | Estado |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+            echo "| VPS_HOST | $( [[ "$HAS_HOST" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
+            echo "| VPS_USER | $( [[ "$HAS_USER" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
+            echo "| VPS_SSH_KEY | $( [[ "$HAS_KEY" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
+            echo "| VPS_PATH | $( [[ "$HAS_PATH" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ── Deploy real ───────────────────────────────────────────────────────────
   deploy:
     name: Deploy a producción
-    needs: preview
+    needs: [preview, check-secrets]
+    if: needs.check-secrets.outputs.ready == 'true'
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: ${{ vars.APP_URL }}    # se muestra como link en la UI de aprobación
+      url: ${{ vars.APP_URL }}
 
     steps:
       - uses: actions/checkout@v4
@@ -74,10 +110,8 @@ jobs:
       - name: Resumen del deploy
         run: |
           echo "## ✅ Deploy exitoso" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Servidor | \`${{ secrets.VPS_HOST }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Aprobado por | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Fecha | $(date '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
