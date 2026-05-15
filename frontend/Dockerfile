@@ -1,7 +1,7 @@
 # ── Stage 1: build ────────────────────────────────────────────────────────
 FROM node:24-alpine AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
