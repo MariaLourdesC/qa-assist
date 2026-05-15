@@ -31,44 +31,12 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** \`${{ github.ref_name }}\` · **Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
 
-  # ── Verificar que los secrets del VPS están configurados ─────────────────
-  check-secrets:
-    name: Verificar secrets del VPS
-    runs-on: ubuntu-latest
-    outputs:
-      ready: ${{ steps.check.outputs.ready }}
-    steps:
-      - name: Verificar secrets
-        id: check
-        env:
-          HAS_HOST: ${{ secrets.VPS_HOST != '' }}
-          HAS_USER: ${{ secrets.VPS_USER != '' }}
-          HAS_KEY:  ${{ secrets.VPS_SSH_KEY != '' }}
-          HAS_PATH: ${{ secrets.VPS_PATH != '' }}
-        run: |
-          if [[ "$HAS_HOST" == "true" && "$HAS_USER" == "true" && "$HAS_KEY" == "true" && "$HAS_PATH" == "true" ]]; then
-            echo "ready=true" >> $GITHUB_OUTPUT
-            echo "✅ Todos los secrets del VPS están configurados." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "ready=false" >> $GITHUB_OUTPUT
-            echo "## ⚠️ Deploy saltado — secrets no configurados" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Para activar el deploy automático, configurá estos secrets en:" >> $GITHUB_STEP_SUMMARY
-            echo "**Settings → Secrets → Actions**" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| Secret | Estado |" >> $GITHUB_STEP_SUMMARY
-            echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
-            echo "| VPS_HOST | $( [[ "$HAS_HOST" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
-            echo "| VPS_USER | $( [[ "$HAS_USER" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
-            echo "| VPS_SSH_KEY | $( [[ "$HAS_KEY" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
-            echo "| VPS_PATH | $( [[ "$HAS_PATH" == "true" ]] && echo "✅" || echo "❌ Falta" ) |" >> $GITHUB_STEP_SUMMARY
-          fi
-
   # ── Deploy real ───────────────────────────────────────────────────────────
   deploy:
     name: Deploy a producción
-    needs: [preview, check-secrets]
-    if: needs.check-secrets.outputs.ready == 'true'
+    needs: preview
+    # Se saltea limpiamente si los secrets del VPS no están configurados
+    if: ${{ secrets.VPS_HOST != '' && secrets.VPS_USER != '' && secrets.VPS_SSH_KEY != '' && secrets.VPS_PATH != '' }}
     runs-on: ubuntu-latest
     environment:
       name: production
