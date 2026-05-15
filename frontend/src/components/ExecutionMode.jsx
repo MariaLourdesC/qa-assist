@@ -256,13 +256,14 @@ export default function ExecutionMode({ testCases, edgeCases = [], tcTags = {}, 
                 </div>
 
                 {/* Status buttons */}
-                <div className="flex shrink-0 items-center gap-1">
+                <div className="flex shrink-0 flex-wrap items-center gap-1">
                   {Object.entries(STATUS_BTN).map(([s, cfg]) => (
                     <button
                       key={s}
                       type="button"
                       onClick={() => setStatus(tc, s)}
                       title={t(cfg.title)}
+                      aria-label={t(cfg.title)}
                       className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm ring-1 ring-inset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                         status === s
                           ? `${cfg.active} ring-2`

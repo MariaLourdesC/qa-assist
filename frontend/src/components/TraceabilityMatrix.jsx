@@ -72,7 +72,7 @@ export default function TraceabilityMatrix({ analysis, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="traceability-title"
-        className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl"
+        className="relative flex max-h-[95vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl sm:max-h-[90vh]"
       >
         {/* Header */}
         <div className="flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 px-6 py-4">
@@ -104,14 +104,19 @@ export default function TraceabilityMatrix({ analysis, onClose }) {
           </button>
         </div>
 
-        {/* Matrix */}
+        {/* Matrix — scroll horizontal en mobile */}
         <div className="flex-1 overflow-auto">
+          {allTcs.length > 0 && (
+            <p className="px-6 py-2 text-[11px] text-slate-400 dark:text-slate-500 sm:hidden">
+              ← Deslizá horizontalmente para ver todos los casos →
+            </p>
+          )}
           {criteria.length === 0 || allTcs.length === 0 ? (
             <div className="flex items-center justify-center py-16">
               <p className="text-sm text-slate-500 dark:text-slate-400">{t('traceability.empty')}</p>
             </div>
           ) : (
-            <table className="w-full border-collapse text-sm">
+            <table className="min-w-max w-full border-collapse text-sm">
               <thead className="sticky top-0 z-10 bg-white dark:bg-slate-900">
                 <tr>
                   {/* Empty top-left corner */}
