@@ -14,12 +14,50 @@ const jiraLimiter = rateLimit({
   message: { error: 'Too many Jira requests. Try again in a minute.' }
 });
 
+// ── SSRF protection — validates jiraUrl is a safe external HTTPS host ────
+function validateJiraUrl(raw) {
+  let parsed;
+  try { parsed = new URL(raw); } catch {
+    throw Object.assign(new Error('Invalid Jira URL'), { status: 400 });
+  }
+
+  if (parsed.protocol !== 'https:') {
+    throw Object.assign(new Error('Jira URL must use HTTPS'), { status: 400 });
+  }
+
+  const host = parsed.hostname.toLowerCase();
+
+  // Block loopback, link-local, private ranges, and localhost variants
+  const BLOCKED = [
+    /^localhost$/,
+    /^127\./,
+    /^0\.0\.0\.0$/,
+    /^::1$/,
+    /^10\./,
+    /^172\.(1[6-9]|2\d|3[01])\./,
+    /^192\.168\./,
+    /^169\.254\./,        // AWS metadata / link-local
+    /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./,  // CGNAT
+    /^0\./,               // 0.x.x.x
+    /\.local$/,           // mDNS
+    /\.internal$/,
+    /\.localhost$/
+  ];
+
+  if (BLOCKED.some(re => re.test(host))) {
+    throw Object.assign(new Error('Jira URL points to a private or reserved address'), { status: 400 });
+  }
+}
+
 // POST /api/jira/import — fetch a Jira issue and return normalized story fields
 router.post('/import', jiraLimiter, async (req, res) => {
   const { jiraUrl, email, apiToken, issueKey } = req.body;
   if (!jiraUrl || !email || !apiToken || !issueKey) {
     return res.status(400).json({ error: 'jiraUrl, email, apiToken and issueKey are required' });
   }
+
+  try { validateJiraUrl(jiraUrl); }
+  catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
   const base64 = Buffer.from(`${email}:${apiToken}`).toString('base64');
   const cleanUrl = jiraUrl.replace(/\/$/, '');
@@ -58,6 +96,9 @@ router.post('/export-tests', jiraLimiter, async (req, res) => {
   if (!jiraUrl || !email || !apiToken || !projectKey || !Array.isArray(testCases) || testCases.length === 0) {
     return res.status(400).json({ error: 'jiraUrl, email, apiToken, projectKey and testCases[] are required' });
   }
+
+  try { validateJiraUrl(jiraUrl); }
+  catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
   const base64 = Buffer.from(`${email}:${apiToken}`).toString('base64');
   const cleanUrl = jiraUrl.replace(/\/$/, '');

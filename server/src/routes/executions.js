@@ -3,6 +3,23 @@ const rateLimit  = require('express-rate-limit');
 const authenticate = require('../middleware/authenticate');
 const { getDb, saveDb } = require('../db/connection');
 
+// Shared SSRF guard — reused from jira.js logic
+function validateJiraUrl(raw) {
+  let parsed;
+  try { parsed = new URL(raw); } catch {
+    throw Object.assign(new Error('Invalid Jira URL'), { status: 400 });
+  }
+  if (parsed.protocol !== 'https:') {
+    throw Object.assign(new Error('Jira URL must use HTTPS'), { status: 400 });
+  }
+  const host = parsed.hostname.toLowerCase();
+  const BLOCKED = [/^localhost$/, /^127\./, /^0\.0\.0\.0$/, /^::1$/, /^10\./,
+    /^172\.(1[6-9]|2\d|3[01])\./, /^192\.168\./, /^169\.254\./, /\.local$/, /\.internal$/, /\.localhost$/];
+  if (BLOCKED.some(re => re.test(host))) {
+    throw Object.assign(new Error('Jira URL points to a private or reserved address'), { status: 400 });
+  }
+}
+
 const router = express.Router();
 router.use(authenticate);
 
@@ -223,6 +240,9 @@ router.post('/:id/export-bugs', exportLimiter, async (req, res) => {
     if (!jiraUrl || !email || !apiToken || !projectKey) {
       return res.status(400).json({ error: 'jiraUrl, email, apiToken and projectKey are required' });
     }
+
+    try { validateJiraUrl(jiraUrl); }
+    catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
     const failed = rows(db.exec(
       `SELECT * FROM test_execution_results
