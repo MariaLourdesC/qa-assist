@@ -1,8 +1,12 @@
 name: CD — Deploy to VPS
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:       # Solo se ejecuta cuando lo triggerean manualmente
+    inputs:
+      confirm:
+        description: '¿Confirmar deploy a producción? (escribí "deploy")'
+        required: true
+        default: ''
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -12,16 +16,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # ── Validar input ─────────────────────────────────────────────────────────
+  validate:
+    name: Validar confirmación
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar confirmación
+        run: |
+          if [[ "${{ github.event.inputs.confirm }}" != "deploy" ]]; then
+            echo "❌ Confirmación inválida. Escribí exactamente 'deploy' para continuar."
+            exit 1
+          fi
+          echo "✅ Confirmación válida. Iniciando deploy..."
+
   # ── Resumen del cambio ────────────────────────────────────────────────────
   preview:
     name: Resumen del cambio
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 10
 
-      - name: Commits incluidos en este deploy
+      - name: Commits en este deploy
         run: |
           echo "### Commits a deployar" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -29,14 +47,12 @@ jobs:
           echo "|------|---------|-------|" >> $GITHUB_STEP_SUMMARY
           git log --oneline -10 --pretty="| \`%h\` | %s | %an |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** \`${{ github.ref_name }}\` · **Autor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Disparado por:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
 
-  # ── Deploy real ───────────────────────────────────────────────────────────
+  # ── Deploy con aprobación manual ──────────────────────────────────────────
   deploy:
     name: Deploy a producción
     needs: preview
-    # Se saltea limpiamente si los secrets del VPS no están configurados
-    if: ${{ secrets.VPS_HOST != '' && secrets.VPS_USER != '' && secrets.VPS_SSH_KEY != '' && secrets.VPS_PATH != '' }}
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -81,5 +97,5 @@ jobs:
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Aprobado por | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Disparado por | ${{ github.actor }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Fecha | $(date '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
