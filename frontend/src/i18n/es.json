@@ -337,9 +337,11 @@
     "active": "Activa",
     "updatedAt": "Actualizada {{date}}",
     "deleteConfirm": "¿Eliminar la historia \"{{title}}\" y todos sus análisis?",
+    "cloneBtn": "Duplicar historia",
     "toast": {
       "loaded": "Historia \"{{title}}\" cargada",
       "deleted": "Historia \"{{title}}\" eliminada",
+      "cloned": "\"{{title}}\" creada como copia",
       "loadError": "Error cargando historial: {{message}}"
     }
   },

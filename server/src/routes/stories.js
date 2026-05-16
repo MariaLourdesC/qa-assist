@@ -199,6 +199,38 @@ router.put('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// POST /api/stories/:id/clone
+router.post('/:id/clone', async (req, res) => {
+  try {
+    const db = await getDb();
+    if (!ownStory(db, req.params.id, req.user.id)) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+    const rows = db.exec('SELECT * FROM stories WHERE id = ?', [req.params.id]);
+    if (!rows.length || !rows[0].values.length) {
+      return res.status(404).json({ error: 'Historia no encontrada' });
+    }
+    const { columns, values } = rows[0];
+    const orig = Object.fromEntries(columns.map((c, i) => [c, values[0][i]]));
+
+    const prefix = req.body?.prefix || 'Copia de';
+    const newTitulo = `${prefix} ${orig.titulo}`.slice(0, 200);
+
+    db.run(
+      `INSERT INTO stories (project_id, titulo, modulo, descripcion, fuente, notas_qa, estado, user_id)
+       VALUES (?, ?, ?, ?, ?, ?, 'draft', ?)`,
+      [orig.project_id, newTitulo, orig.modulo, orig.descripcion,
+       orig.fuente, orig.notas_qa, req.user.id]
+    );
+    const newId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0];
+    saveDb();
+
+    const newRows = db.exec('SELECT * FROM stories WHERE id = ?', [newId]);
+    const story = Object.fromEntries(newRows[0].columns.map((c, i) => [c, newRows[0].values[0][i]]));
+    res.status(201).json(story);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 // DELETE /api/stories/:id
 router.delete('/:id', async (req, res) => {
   try {

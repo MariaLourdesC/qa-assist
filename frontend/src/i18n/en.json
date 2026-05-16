@@ -337,9 +337,11 @@
     "active": "Active",
     "updatedAt": "Updated {{date}}",
     "deleteConfirm": "Delete story \"{{title}}\" and all its analyses?",
+    "cloneBtn": "Duplicate story",
     "toast": {
       "loaded": "Story \"{{title}}\" loaded",
       "deleted": "Story \"{{title}}\" deleted",
+      "cloned": "\"{{title}}\" created as a copy",
       "loadError": "Error loading history: {{message}}"
     }
   },

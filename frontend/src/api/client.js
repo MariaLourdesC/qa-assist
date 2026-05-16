@@ -105,7 +105,8 @@ export const storiesApi = {
   delete:          (id)        => fetchApi(`${API_STORIES}/${id}`, { method: 'DELETE' }),
   checkDuplicates: (data)      => fetchApi(`${API_STORIES}/check-duplicates`, { method: 'POST', body: JSON.stringify(data) }),
   bulkDelete:      (ids)       => fetchApi(`${API_STORIES}/bulk-delete`,  { method: 'POST', body: JSON.stringify({ ids }) }),
-  bulkApprove:     (ids)       => fetchApi(`${API_STORIES}/bulk-approve`, { method: 'POST', body: JSON.stringify({ ids }) })
+  bulkApprove:     (ids)       => fetchApi(`${API_STORIES}/bulk-approve`, { method: 'POST', body: JSON.stringify({ ids }) }),
+  clone:           (id)        => fetchApi(`${API_STORIES}/${id}/clone`,  { method: 'POST', body: JSON.stringify({}) })
 };
 
 export const analysesApi = {
