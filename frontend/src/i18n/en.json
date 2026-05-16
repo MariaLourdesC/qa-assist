@@ -301,6 +301,17 @@
     "noMatches": "No matches for \"{{query}}\"",
     "noStories": "No stories created in this project yet.",
     "showMore": "Show {{count}} more ({{total}} remaining)",
+    "bulk": {
+      "toggle":        "Select",
+      "selectAll":     "Select all",
+      "deselectAll":   "Deselect all",
+      "selected":      "{{count}} selected",
+      "approve":       "Approve",
+      "delete":        "Delete",
+      "deleteConfirm": "Delete {{count}} story/stories? This cannot be undone.",
+      "deletedOk":     "{{count}} story/stories deleted",
+      "approvedOk":    "{{count}} story/stories approved"
+    },
     "filter": {
       "all":        "All",
       "draft":      "Drafts",
@@ -637,6 +648,15 @@
     "saved": "Traceability saved",
     "empty": "You need acceptance criteria and test cases to use this view"
   },
+  "search": {
+    "title":          "Search",
+    "buttonLabel":    "Search...",
+    "placeholder":    "Search projects and stories…",
+    "hint":           "Type at least 2 characters to search",
+    "noResults":      "No results for \"{{q}}\"",
+    "sectionProjects":"Projects ({{count}})",
+    "sectionStories": "Stories ({{count}})"
+  },
   "qaDashboard": {
     "title": "QA Metrics",
     "subtitle": "{{runs}} run(s) · {{rate}}% pass rate",
@@ -657,6 +677,7 @@
     "title": "Keyboard shortcuts",
     "showHelp": "Show this help",
     "focusSearch": "Focus search",
+    "openSearch": "Search across all projects",
     "analyzeStory": "Analyze story",
     "closeModal": "Close modal",
     "hint": "Shortcuts work when focus is not inside a text field."

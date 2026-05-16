@@ -301,6 +301,17 @@
     "noMatches": "Sin coincidencias para \"{{query}}\"",
     "noStories": "Aún no se han creado historias en este proyecto.",
     "showMore": "Ver {{count}} más ({{total}} restantes)",
+    "bulk": {
+      "toggle":        "Seleccionar",
+      "selectAll":     "Seleccionar todas",
+      "deselectAll":   "Deseleccionar todas",
+      "selected":      "{{count}} seleccionada(s)",
+      "approve":       "Aprobar",
+      "delete":        "Eliminar",
+      "deleteConfirm": "¿Eliminar {{count}} historia(s)? Esta acción no se puede deshacer.",
+      "deletedOk":     "{{count}} historia(s) eliminada(s)",
+      "approvedOk":    "{{count}} historia(s) aprobada(s)"
+    },
     "filter": {
       "all":        "Todas",
       "draft":      "Borradores",
@@ -637,6 +648,15 @@
     "saved": "Trazabilidad guardada",
     "empty": "Necesitás criterios de aceptación y test cases para usar esta vista"
   },
+  "search": {
+    "title":          "Buscar",
+    "buttonLabel":    "Buscar...",
+    "placeholder":    "Buscar proyectos e historias…",
+    "hint":           "Escribí al menos 2 caracteres para buscar",
+    "noResults":      "Sin resultados para \"{{q}}\"",
+    "sectionProjects":"Proyectos ({{count}})",
+    "sectionStories": "Historias ({{count}})"
+  },
   "qaDashboard": {
     "title": "Métricas QA",
     "subtitle": "{{runs}} ejecución(es) · {{rate}}% pass rate",
@@ -657,6 +677,7 @@
     "title": "Atajos de teclado",
     "showHelp": "Mostrar esta ayuda",
     "focusSearch": "Enfocar búsqueda",
+    "openSearch": "Buscar en todos los proyectos",
     "analyzeStory": "Analizar historia",
     "closeModal": "Cerrar modal",
     "hint": "Los atajos funcionan cuando el foco no está en un campo de texto."

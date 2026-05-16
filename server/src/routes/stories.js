@@ -212,4 +212,46 @@ router.delete('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// POST /api/stories/bulk-delete
+router.post('/bulk-delete', async (req, res) => {
+  try {
+    const ids = req.body?.ids;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids[] is required' });
+    }
+    if (ids.length > 100) return res.status(400).json({ error: 'Max 100 ids per request' });
+
+    const db = await getDb();
+    let deleted = 0;
+    for (const id of ids) {
+      if (!ownStory(db, id, req.user.id)) continue; // silently skip unowned
+      db.run('DELETE FROM stories WHERE id = ?', [id]);
+      deleted++;
+    }
+    if (deleted > 0) saveDb();
+    res.json({ deleted });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// POST /api/stories/bulk-approve
+router.post('/bulk-approve', async (req, res) => {
+  try {
+    const ids = req.body?.ids;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids[] is required' });
+    }
+    if (ids.length > 100) return res.status(400).json({ error: 'Max 100 ids per request' });
+
+    const db = await getDb();
+    let approved = 0;
+    for (const id of ids) {
+      if (!ownStory(db, id, req.user.id)) continue;
+      db.run(`UPDATE stories SET estado = 'approved', updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [id]);
+      approved++;
+    }
+    if (approved > 0) saveDb();
+    res.json({ approved });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 module.exports = router;

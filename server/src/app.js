@@ -64,6 +64,9 @@ app.use('/api/jira', require('./routes/jira'));
 // ── Test executions & bug reports ─────────────────────────────────────────
 app.use('/api/executions', require('./routes/executions'));
 
+// ── Global search ─────────────────────────────────────────────────────────
+app.use('/api/search', require('./routes/search'));
+
 // ── Protected API routes ──────────────────────────────────────────────────
 app.use('/api/projects',        require('./routes/projects'));
 app.use('/api/stories',         require('./routes/stories'));

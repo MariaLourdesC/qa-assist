@@ -30,9 +30,12 @@ export default function StoryHistory({ projectId, refreshKey, onLoadStory, activ
   const [open, setOpen] = useState(false);
   const autoOpened = useRef(false);
   const [query, setQuery] = useState('');
-  const [estadoFilter, setEstadoFilter] = useState('all'); // 'all' | 'analyzed' | 'draft'
-  const [sortBy, setSortBy] = useState('recent');           // 'recent' | 'oldest' | 'az'
+  const [estadoFilter, setEstadoFilter] = useState('all');
+  const [sortBy, setSortBy]             = useState('recent');
   const [visibleCount, setVisibleCount] = useState(20);
+  const [bulkMode, setBulkMode]         = useState(false);
+  const [selected, setSelected]         = useState(new Set());
+  const [bulkBusy, setBulkBusy]         = useState(false);
 
   const PAGE_SIZE = 20;
   const SORTS = ['recent', 'oldest', 'az'];
@@ -80,6 +83,50 @@ export default function StoryHistory({ projectId, refreshKey, onLoadStory, activ
     load();
     return () => { cancelled = true; };
   }, [projectId, refreshKey, addToast]);
+
+  const toggleSelect = (id) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    setSelected(selected.size === filteredStories.length
+      ? new Set()
+      : new Set(filteredStories.map(s => s.id))
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(t('history.bulk.deleteConfirm', { count: selected.size }))) return;
+    setBulkBusy(true);
+    try {
+      const { deleted } = await storiesApi.bulkDelete([...selected]);
+      setStories(prev => prev.filter(s => !selected.has(s.id)));
+      setSelected(new Set());
+      setBulkMode(false);
+      addToast(t('history.bulk.deletedOk', { count: deleted }), 'success');
+    } catch (err) {
+      addToast(err.message, 'error');
+    } finally { setBulkBusy(false); }
+  };
+
+  const handleBulkApprove = async () => {
+    setBulkBusy(true);
+    try {
+      const { approved } = await storiesApi.bulkApprove([...selected]);
+      setStories(prev => prev.map(s =>
+        selected.has(s.id) ? { ...s, estado: 'approved' } : s
+      ));
+      setSelected(new Set());
+      setBulkMode(false);
+      addToast(t('history.bulk.approvedOk', { count: approved }), 'success');
+    } catch (err) {
+      addToast(err.message, 'error');
+    } finally { setBulkBusy(false); }
+  };
 
   const handleDelete = async (e, id, titulo) => {
     e.stopPropagation();
@@ -162,6 +209,45 @@ export default function StoryHistory({ projectId, refreshKey, onLoadStory, activ
                   )}
                 </div>
                 {/* Filters + sort */}
+                {/* ── Bulk toolbar ── */}
+                {bulkMode ? (
+                  <div className="mb-3 flex items-center justify-between gap-2 rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20 px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <button type="button" onClick={toggleSelectAll}
+                        className="text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:underline focus-visible:outline-none">
+                        {selected.size === filteredStories.length ? t('history.bulk.deselectAll') : t('history.bulk.selectAll')}
+                      </button>
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
+                        {t('history.bulk.selected', { count: selected.size })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <button type="button" onClick={handleBulkApprove}
+                        disabled={selected.size === 0 || bulkBusy}
+                        className="rounded-lg bg-violet-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-violet-700 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
+                        {t('history.bulk.approve')}
+                      </button>
+                      <button type="button" onClick={handleBulkDelete}
+                        disabled={selected.size === 0 || bulkBusy}
+                        className="rounded-lg bg-red-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+                        {t('history.bulk.delete')}
+                      </button>
+                      <button type="button" onClick={() => { setBulkMode(false); setSelected(new Set()); }}
+                        className="rounded-lg px-2 py-1 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 focus-visible:outline-none">
+                        {t('common.cancel')}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button type="button" onClick={() => setBulkMode(true)}
+                    className="mb-3 ml-auto flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true">
+                      <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {t('history.bulk.toggle')}
+                  </button>
+                )}
+
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1">
                     {['all', 'analyzed', 'in_testing', 'passed', 'failed', 'approved', 'draft'].map(f => (
@@ -203,16 +289,21 @@ export default function StoryHistory({ projectId, refreshKey, onLoadStory, activ
                       return (
                         <li key={story.id}>
                           <div
-                            onClick={() => onLoadStory(story)}
+                            onClick={() => bulkMode ? toggleSelect(story.id) : onLoadStory(story)}
                             role="button"
                             tabIndex={0}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onLoadStory(story); } }}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bulkMode ? toggleSelect(story.id) : onLoadStory(story); } }}
                             className={`group flex cursor-pointer items-start justify-between gap-3 rounded-xl border p-3 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                               isActive
                                 ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/30 ring-1 ring-inset ring-emerald-600/20 dark:ring-emerald-400/20'
                                 : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                             }`}
                           >
+                            {bulkMode && (
+                              <input type="checkbox" readOnly checked={selected.has(story.id)}
+                                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 dark:border-slate-600 text-emerald-600 focus:ring-emerald-500"
+                              />
+                            )}
                             <div className="min-w-0 flex-1">
                               <div className="mb-1 flex flex-wrap items-center gap-2">
                                 <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ring-1 ring-inset ${estadoStyle}`}>

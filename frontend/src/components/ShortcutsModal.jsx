@@ -69,7 +69,7 @@ export default function ShortcutsModal({ onClose }) {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800 px-5">
           <Row keys={['?']}          desc={t('shortcuts.showHelp')} />
-          <Row keys={['/']}          desc={t('shortcuts.focusSearch')} />
+          <Row keys={['/']}          desc={t('shortcuts.openSearch')} />
           <Row keys={[mod, '↵']}     desc={t('shortcuts.analyzeStory')} />
           <Row keys={['Esc']}        desc={t('shortcuts.closeModal')} />
         </div>

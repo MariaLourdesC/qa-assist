@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import ToastContainer from './ToastContainer';
 import ShortcutsModal from './ShortcutsModal';
 import OfflineBanner from './OfflineBanner';
+import GlobalSearch from './GlobalSearch';
 import useHotkey from '../hooks/useHotkey';
 
 function LanguageToggle() {
@@ -55,8 +56,10 @@ export default function Layout() {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showSearch, setShowSearch]       = useState(false);
 
   useHotkey('?', () => setShowShortcuts(s => !s));
+  useHotkey('/', () => setShowSearch(true), { allowInInputs: false });
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
@@ -77,6 +80,20 @@ export default function Layout() {
             </div>
           </Link>
           <div className="flex items-center gap-2">
+            {user && (
+              <button
+                type="button"
+                onClick={() => setShowSearch(true)}
+                aria-label={t('search.title')}
+                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-50 dark:hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true">
+                  <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                {t('search.buttonLabel')}
+                <kbd className="rounded border border-slate-200 dark:border-slate-600 px-1 font-mono text-[10px]">/</kbd>
+              </button>
+            )}
             {user && (
               <>
                 <Link
@@ -128,6 +145,7 @@ export default function Layout() {
 
       <OfflineBanner />
       <ToastContainer toasts={toasts} />
+      {showSearch && <GlobalSearch onClose={() => setShowSearch(false)} />}
       {showShortcuts && <ShortcutsModal onClose={() => setShowShortcuts(false)} />}
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">

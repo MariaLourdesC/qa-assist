@@ -103,7 +103,9 @@ export const storiesApi = {
   create:          (data)      => fetchApi(API_STORIES, { method: 'POST', body: JSON.stringify(data) }),
   update:          (id, data)  => fetchApi(`${API_STORIES}/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete:          (id)        => fetchApi(`${API_STORIES}/${id}`, { method: 'DELETE' }),
-  checkDuplicates: (data)      => fetchApi(`${API_STORIES}/check-duplicates`, { method: 'POST', body: JSON.stringify(data) })
+  checkDuplicates: (data)      => fetchApi(`${API_STORIES}/check-duplicates`, { method: 'POST', body: JSON.stringify(data) }),
+  bulkDelete:      (ids)       => fetchApi(`${API_STORIES}/bulk-delete`,  { method: 'POST', body: JSON.stringify({ ids }) }),
+  bulkApprove:     (ids)       => fetchApi(`${API_STORIES}/bulk-approve`, { method: 'POST', body: JSON.stringify({ ids }) })
 };
 
 export const analysesApi = {
@@ -126,6 +128,10 @@ export const templatesApi = {
   create:  (data)     => fetchApi('/api/templates',      { method: 'POST',   body: JSON.stringify(data) }),
   update:  (id, data) => fetchApi(`/api/templates/${id}`, { method: 'PUT',   body: JSON.stringify(data) }),
   delete:  (id)       => fetchApi(`/api/templates/${id}`, { method: 'DELETE' })
+};
+
+export const searchApi = {
+  query: (q) => fetchApi(`/api/search?q=${encodeURIComponent(q)}`)
 };
 
 export const executionsApi = {
