@@ -13,10 +13,16 @@ function validateJiraUrl(raw) {
     throw Object.assign(new Error('Jira URL must use HTTPS'), { status: 400 });
   }
   const host = parsed.hostname.toLowerCase();
-  const BLOCKED = [/^localhost$/, /^127\./, /^0\.0\.0\.0$/, /^::1$/, /^10\./,
-    /^172\.(1[6-9]|2\d|3[01])\./, /^192\.168\./, /^169\.254\./, /\.local$/, /\.internal$/, /\.localhost$/];
+  const BLOCKED = [/^localhost$/, /^127\./, /^0\.0\.0\.0$/, /^::1$/, /^::$/, /^10\./,
+    /^172\.(1[6-9]|2\d|3[01])\./, /^192\.168\./, /^169\.254\./,
+    /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./, /\.local$/, /\.internal$/, /\.localhost$/,
+    /^fd[0-9a-f]{2}:/i, /^fe80:/i];
   if (BLOCKED.some(re => re.test(host))) {
     throw Object.assign(new Error('Jira URL points to a private or reserved address'), { status: 400 });
+  }
+  // Block octal (0177.x), decimal integer (2130706433), hex (0x7f000001)
+  if (/^0[0-7]/.test(host) || /^\d+$/.test(host) || /^0x[0-9a-f]+$/i.test(host)) {
+    throw Object.assign(new Error('Jira URL uses non-standard IP notation'), { status: 400 });
   }
 }
 
@@ -83,6 +89,17 @@ router.post('/', async (req, res) => {
     if (!analysis_run_id || !Array.isArray(test_cases) || test_cases.length === 0) {
       return res.status(400).json({ error: 'analysis_run_id and test_cases[] are required' });
     }
+    // Reject oversized arrays before allocating memory
+    if (test_cases.length > 500) {
+      return res.status(400).json({ error: 'test_cases array too large (max 500)' });
+    }
+    // Validate each item has a string id
+    for (const tc of test_cases) {
+      if (!tc || typeof tc !== 'object' || typeof tc.id !== 'string' || !tc.id.trim()) {
+        return res.status(400).json({ error: 'Each test case must have a non-empty string id' });
+      }
+    }
+
     const db = await getDb();
     if (!ownRun(db, analysis_run_id, req.user.id)) {
       return res.status(404).json({ error: 'Analysis run not found' });
@@ -95,9 +112,11 @@ router.post('/', async (req, res) => {
     const execId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0];
 
     for (const tc of test_cases) {
+      const tcId    = String(tc.id).slice(0, 50);   // enforce max length
+      const tcTitle = String(tc.titulo || tc.id).slice(0, 500);
       db.run(
         'INSERT INTO test_execution_results (execution_id, tc_id, tc_titulo, status) VALUES (?, ?, ?, ?)',
-        [execId, tc.id, tc.titulo || tc.id, 'pending']
+        [execId, tcId, tcTitle, 'pending']
       );
     }
 
@@ -165,9 +184,19 @@ router.patch('/:id/results', async (req, res) => {
     }
     const { tc_id, status, bug_titulo, bug_pasos_reales, bug_severidad, bug_ambiente, bug_screenshot_url, bug_notas } = req.body;
     if (!tc_id || !status) return res.status(400).json({ error: 'tc_id and status required' });
+    if (typeof tc_id !== 'string') return res.status(400).json({ error: 'tc_id must be a string' });
 
     const valid = ['pass', 'fail', 'blocked', 'skip', 'pending'];
     if (!valid.includes(status)) return res.status(400).json({ error: 'Invalid status' });
+
+    // Verify tc_id belongs to this execution (prevents fabricating results for non-existent TCs)
+    const tcExists = db.exec(
+      'SELECT id FROM test_execution_results WHERE execution_id = ? AND tc_id = ?',
+      [req.params.id, tc_id]
+    );
+    if (!tcExists.length || !tcExists[0].values.length) {
+      return res.status(404).json({ error: 'Test case not found in this execution' });
+    }
 
     const { bug_status } = req.body;
     db.run(

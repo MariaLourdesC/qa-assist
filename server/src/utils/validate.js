@@ -43,6 +43,12 @@ function cleanArray(value, mapItem, max = 200) {
     err.status = 400;
     throw err;
   }
+  // Reject oversized arrays BEFORE allocating — prevents memory DoS
+  if (value.length > max * 10) {
+    const err = new Error(`Array too large (max ${max * 10} items)`);
+    err.status = 400;
+    throw err;
+  }
   return value.slice(0, max).map(mapItem).filter(Boolean);
 }
 

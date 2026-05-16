@@ -28,24 +28,41 @@ function validateJiraUrl(raw) {
   const host = parsed.hostname.toLowerCase();
 
   // Block loopback, link-local, private ranges, and localhost variants
-  const BLOCKED = [
+  const BLOCKED_PATTERNS = [
     /^localhost$/,
     /^127\./,
     /^0\.0\.0\.0$/,
     /^::1$/,
+    /^::$/,
     /^10\./,
     /^172\.(1[6-9]|2\d|3[01])\./,
     /^192\.168\./,
-    /^169\.254\./,        // AWS metadata / link-local
-    /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./,  // CGNAT
-    /^0\./,               // 0.x.x.x
-    /\.local$/,           // mDNS
+    /^169\.254\./,                                    // AWS metadata / link-local
+    /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./,    // CGNAT
+    /^0\./,                                           // 0.x.x.x
+    /\.local$/,                                       // mDNS
     /\.internal$/,
-    /\.localhost$/
+    /\.localhost$/,
+    /^fd[0-9a-f]{2}:/i,                              // IPv6 ULA
+    /^fe80:/i,                                        // IPv6 link-local
   ];
 
-  if (BLOCKED.some(re => re.test(host))) {
+  if (BLOCKED_PATTERNS.some(re => re.test(host))) {
     throw Object.assign(new Error('Jira URL points to a private or reserved address'), { status: 400 });
+  }
+
+  // Block octal notation (0177.0.0.1 = 127.0.0.1) and decimal notation (2130706433 = 127.0.0.1)
+  // Octal: any octet starting with 0 followed by digits
+  if (/^0[0-7]/.test(host)) {
+    throw Object.assign(new Error('Jira URL uses non-standard IP notation'), { status: 400 });
+  }
+  // Pure decimal integer hostnames (e.g. 2130706433)
+  if (/^\d+$/.test(host)) {
+    throw Object.assign(new Error('Jira URL uses non-standard IP notation'), { status: 400 });
+  }
+  // Hex-encoded IPs (0x7f000001)
+  if (/^0x[0-9a-f]+$/i.test(host)) {
+    throw Object.assign(new Error('Jira URL uses non-standard IP notation'), { status: 400 });
   }
 }
 

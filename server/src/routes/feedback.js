@@ -44,9 +44,11 @@ router.post('/', async (req, res) => {
     catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
     const { analysis_run_id, utilidad, comentario } = input;
-    const copied_blocks = Array.isArray(req.body?.copied_blocks)
-      ? req.body.copied_blocks.slice(0, 50)
-      : null;
+    const rawBlocks = req.body?.copied_blocks;
+    if (rawBlocks != null && (!Array.isArray(rawBlocks) || rawBlocks.length > 500)) {
+      return res.status(400).json({ error: 'copied_blocks must be an array of at most 500 items' });
+    }
+    const copied_blocks = Array.isArray(rawBlocks) ? rawBlocks.slice(0, 50) : null;
 
     const db = await getDb();
 
