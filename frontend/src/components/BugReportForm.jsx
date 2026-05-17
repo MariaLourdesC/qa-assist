@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import EvidenceUploader from './EvidenceUploader';
+import StepLibraryPicker from './StepLibraryPicker';
 
 const SEVERITIES = ['critica', 'alta', 'media', 'baja'];
 
@@ -11,10 +12,17 @@ const SEV_COLORS = {
   baja:    'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 ring-slate-600/20'
 };
 
-export default function BugReportForm({ bug, onChange, tcTitulo }) {
+export default function BugReportForm({ bug, onChange, tcTitulo, projectId }) {
   const { t } = useLanguage();
+  const [showPicker, setShowPicker] = useState(false);
 
   const set = (field, value) => onChange({ ...bug, [field]: value });
+
+  const insertFromLibrary = (step) => {
+    const existing = bug.bug_pasos_reales || '';
+    const newSteps = step.pasos.join('\n');
+    set('bug_pasos_reales', existing ? `${existing}\n\n[${step.title}]\n${newSteps}` : `[${step.title}]\n${newSteps}`);
+  };
 
   return (
     <div className="mt-3 space-y-3 rounded-xl border border-red-200 dark:border-red-800 bg-red-50/60 dark:bg-red-950/20 p-4">
@@ -36,9 +44,20 @@ export default function BugReportForm({ bug, onChange, tcTitulo }) {
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-          {t('execution.bugActual')} <span className="text-red-500" aria-hidden="true">*</span>
-        </label>
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
+            {t('execution.bugActual')} <span className="text-red-500" aria-hidden="true">*</span>
+          </label>
+          {projectId && (
+            <button type="button" onClick={() => setShowPicker(true)}
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 hover:underline focus-visible:outline-none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true">
+                <path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+              {t('stepLibrary.insertBtn')}
+            </button>
+          )}
+        </div>
         <textarea
           rows={3}
           value={bug.bug_pasos_reales || ''}
@@ -47,6 +66,14 @@ export default function BugReportForm({ bug, onChange, tcTitulo }) {
           className="block w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1"
         />
       </div>
+
+      {showPicker && (
+        <StepLibraryPicker
+          projectId={projectId}
+          onInsert={insertFromLibrary}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>

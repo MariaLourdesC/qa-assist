@@ -145,6 +145,13 @@ export const executionsApi = {
   exportBugs:   (id, data)     => fetchApi(`/api/executions/${id}/export-bugs`, { method: 'POST', body: JSON.stringify(data) })
 };
 
+export const stepLibraryApi = {
+  getAll:  (projectId) => fetchApi(`/api/step-library?project_id=${projectId}`),
+  create:  (data)      => fetchApi('/api/step-library',      { method: 'POST',   body: JSON.stringify(data) }),
+  update:  (id, data)  => fetchApi(`/api/step-library/${id}`, { method: 'PUT',    body: JSON.stringify(data) }),
+  delete:  (id)        => fetchApi(`/api/step-library/${id}`, { method: 'DELETE' })
+};
+
 export const jiraApi = {
   import:      (data) => fetchApi('/api/jira/import',       { method: 'POST', body: JSON.stringify(data) }),
   exportTests: (data) => fetchApi('/api/jira/export-tests', { method: 'POST', body: JSON.stringify(data) })

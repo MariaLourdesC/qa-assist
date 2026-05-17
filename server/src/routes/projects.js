@@ -201,14 +201,15 @@ router.post('/', async (req, res) => {
     catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
     const { nombre, descripcion, dominio, contexto_general, glosario, reglas_negocio, sensibilidad } = input;
+    const stepLibrary = Array.isArray(req.body?.step_library) ? req.body.step_library : [];
     const db = await getDb();
     db.run(
       `INSERT INTO projects
-         (nombre, descripcion, dominio, contexto_general, glosario_json, reglas_negocio_json, sensibilidad, user_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+         (nombre, descripcion, dominio, contexto_general, glosario_json, reglas_negocio_json, sensibilidad, user_id, step_library_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [nombre, descripcion || null, dominio || null, contexto_general || null,
        JSON.stringify(glosario || []), JSON.stringify(reglas_negocio || []),
-       sensibilidad || 'interno', req.user.id]
+       sensibilidad || 'interno', req.user.id, JSON.stringify(stepLibrary)]
     );
     const newId = db.exec('SELECT last_insert_rowid() AS id')[0].values[0][0];
     saveDb();
@@ -224,6 +225,7 @@ router.put('/:id', async (req, res) => {
     catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
 
     const { nombre, descripcion, dominio, contexto_general, glosario, reglas_negocio, sensibilidad } = input;
+    const stepLibrary = Array.isArray(req.body?.step_library) ? req.body.step_library : [];
     const db = await getDb();
     const own = db.exec(
       'SELECT id FROM projects WHERE id = ? AND user_id = ?',
@@ -235,11 +237,13 @@ router.put('/:id', async (req, res) => {
     db.run(
       `UPDATE projects
        SET nombre=?, descripcion=?, dominio=?, contexto_general=?,
-           glosario_json=?, reglas_negocio_json=?, sensibilidad=?, updated_at=CURRENT_TIMESTAMP
+           glosario_json=?, reglas_negocio_json=?, sensibilidad=?,
+           step_library_json=?, updated_at=CURRENT_TIMESTAMP
        WHERE id=? AND user_id=?`,
       [nombre, descripcion || null, dominio || null, contexto_general || null,
        JSON.stringify(glosario || []), JSON.stringify(reglas_negocio || []),
-       sensibilidad || 'interno', req.params.id, req.user.id]
+       sensibilidad || 'interno', JSON.stringify(stepLibrary),
+       req.params.id, req.user.id]
     );
     saveDb();
     res.json(rowsToObjects(db.exec('SELECT * FROM projects WHERE id = ?', [req.params.id])[0])[0]);

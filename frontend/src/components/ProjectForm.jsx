@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
 import InlineTable from './InlineTable';
 import TemplateMenu from './TemplateMenu';
+import StepLibraryEditor from './StepLibraryEditor';
 
 const SENSITIVITY_VALUES = ['publico', 'interno', 'sensible', 'restringido'];
 
@@ -21,7 +22,8 @@ export default function ProjectForm({ project, onClose, onSave }) {
     dominio: project?.dominio || '', contexto_general: project?.contexto_general || '',
     sensibilidad: project?.sensibilidad || 'interno',
     glosario: tryParse(project?.glosario_json || '[]'),
-    reglas_negocio: tryParse(project?.reglas_negocio_json || '[]')
+    reglas_negocio: tryParse(project?.reglas_negocio_json || '[]'),
+    step_library: tryParse(project?.step_library_json || '[]')
   });
   function tryParse(json) { try { return JSON.parse(json); } catch { return []; } }
   const isEdit = !!project?.id;
@@ -59,7 +61,12 @@ export default function ProjectForm({ project, onClose, onSave }) {
     if (saving) return;
     setSaving(true);
     try {
-      const payload = { ...formData, glosario: formData.glosario, reglas_negocio: formData.reglas_negocio };
+      const payload = {
+        ...formData,
+        glosario:      formData.glosario,
+        reglas_negocio: formData.reglas_negocio,
+        step_library:  formData.step_library
+      };
       if (project?.id) {
         await projectsApi.update(project.id, payload);
         addToast(t('projects.toast.updated', { name: formData.nombre }), 'success');
@@ -163,6 +170,17 @@ export default function ProjectForm({ project, onClose, onSave }) {
                 <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{t('projects.form.rulesDesc')}</p>
               </div>
               <InlineTable items={formData.reglas_negocio} columns={['regla', 'tipo']} onUpdate={(items) => update('reglas_negocio', items)} placeholders={{ regla: 'Ej: Monto máximo $10,000 USD', tipo: 'restriccion' }} />
+            </section>
+
+            <section>
+              <div className="mb-3">
+                <h3 className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t('stepLibrary.sectionTitle')}</h3>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{t('stepLibrary.sectionDesc')}</p>
+              </div>
+              <StepLibraryEditor
+                steps={formData.step_library}
+                onChange={(items) => update('step_library', items)}
+              />
             </section>
           </div>
           <div className="flex items-center justify-end gap-2 border-t border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/40 px-6 py-4">

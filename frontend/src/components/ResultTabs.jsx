@@ -57,7 +57,7 @@ export default function ResultTabs({ analysis, versions, currentVersion, onVersi
   const [showRewrite, setShowRewrite]         = useState(false);
   const [showTraceability, setShowTraceability] = useState(false);
   const meta = analysis?.meta || {};
-  const data = { ...(analysis?.resultado || {}), meta, quality_checks: analysis?.quality_checks || {}, _analysisRunId: analysis?.id };
+  const data = { ...(analysis?.resultado || {}), meta, quality_checks: analysis?.quality_checks || {}, _analysisRunId: analysis?.id, _projectId: analysis?.project_id };
   const ActivePanel = TABS.find(tab => tab.id === activeTab)?.component;
   const canCompare    = (versions || []).length >= 2;
   const hasCriteria   = (analysis?.resultado?.criterios_aceptacion || []).length > 0;

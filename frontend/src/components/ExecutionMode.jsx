@@ -14,7 +14,7 @@ const STATUS_BTN = {
 
 const TAG_FILTER_LABELS = { all: null, smoke: 'smoke', regression: 'regression', funcional: 'funcional', exploratorio: 'exploratorio' };
 
-export default function ExecutionMode({ testCases, edgeCases = [], tcTags = {}, analysisRunId, onExit, onRetest }) {
+export default function ExecutionMode({ testCases, edgeCases = [], tcTags = {}, analysisRunId, projectId, onExit, onRetest }) {
   const { t } = useLanguage();
   const { addToast } = useToast();
 
@@ -281,6 +281,7 @@ export default function ExecutionMode({ testCases, edgeCases = [], tcTags = {}, 
                 <BugReportForm
                   bug={result}
                   tcTitulo={tc.titulo}
+                  projectId={projectId}
                   onChange={bugData => updateBug(tc.id, bugData)}
                 />
               )}

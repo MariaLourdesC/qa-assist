@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/011_add_step_library.js)"
+    ]
+  }
+}

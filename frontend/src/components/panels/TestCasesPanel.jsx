@@ -114,6 +114,7 @@ export default function TestCasesPanel({ data, storyTitle }) {
         edgeCases={retestIds ? [] : (data?.negativos_edge_cases || [])}
         tcTags={tcTags}
         analysisRunId={analysisRunId}
+        projectId={data?._projectId}
         onExit={() => {
           setExecutionMode(false);
           setRetestIds(null);

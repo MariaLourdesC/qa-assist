@@ -607,6 +607,25 @@
       "backToList": "Volver al historial"
     }
   },
+  "stepLibrary": {
+    "sectionTitle":    "Biblioteca de pasos",
+    "sectionDesc":     "Pasos reutilizables para precondiciones, setup y verificaciones en las ejecuciones",
+    "addStep":         "Agregar paso compartido",
+    "titlePlaceholder":"Ej: Login como admin",
+    "empty":           "No hay pasos definidos. Agregá el primero.",
+    "insertBtn":       "Insertar desde biblioteca",
+    "searchPlaceholder":"Buscar paso…",
+    "pickerTitle":     "Insertar pasos desde biblioteca",
+    "pickerEmpty":     "No hay pasos en la biblioteca de este proyecto",
+    "pickerNoMatch":   "Sin coincidencias",
+    "categories": {
+      "setup":        "Setup",
+      "precondition": "Precondición",
+      "verification": "Verificación",
+      "teardown":     "Teardown",
+      "util":         "Util"
+    }
+  },
   "tcTags": {
     "label": "Tipo",
     "addTag": "Etiquetar",

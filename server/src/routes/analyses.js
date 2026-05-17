@@ -32,7 +32,7 @@ function safeJson(raw, fallback) {
   try { return JSON.parse(raw || JSON.stringify(fallback)); } catch { return fallback; }
 }
 
-function hidratar(row) {
+function hidratar(row, db) {
   const parserOutput = safeJson(row.parser_output_json, {});
   return {
     id: row.id,
@@ -54,7 +54,14 @@ function hidratar(row) {
     resultado: safeJson(row.final_output_json, {}),
     input_snapshot: safeJson(row.input_snapshot_json, {}),
     traceability: safeJson(row.traceability_json, {}),
-    tc_tags: safeJson(row.tc_tags_json, {})
+    tc_tags:      safeJson(row.tc_tags_json, {}),
+    project_id:   (() => {
+      if (!db) return null;
+      try {
+        const r = db.exec('SELECT project_id FROM stories WHERE id = ?', [row.story_id]);
+        return r.length && r[0].values.length ? r[0].values[0][0] : null;
+      } catch { return null; }
+    })()
   };
 }
 
@@ -182,7 +189,7 @@ router.get('/', async (req, res) => {
       'SELECT * FROM analysis_runs WHERE story_id = ? ORDER BY version DESC',
       [story_id]
     );
-    res.json(rows.length ? rowsToObjects(rows[0]).map(hidratar) : []);
+    res.json(rows.length ? rowsToObjects(rows[0]).map(r => hidratar(r, db)) : []);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -194,7 +201,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Analysis run no encontrado' });
     }
     const rows = db.exec('SELECT * FROM analysis_runs WHERE id = ?', [req.params.id]);
-    res.json(hidratar(rowsToObjects(rows[0])[0]));
+    res.json(hidratar(rowsToObjects(rows[0])[0], db));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -256,7 +263,7 @@ router.post('/:id/suggest-rewrite', analysesLimiter, async (req, res) => {
     }
 
     const runRows = db.exec('SELECT * FROM analysis_runs WHERE id = ?', [req.params.id]);
-    const run = hidratar(rowsToObjects(runRows[0])[0]);
+    const run = hidratar(rowsToObjects(runRows[0])[0], db);
     const storyRows = db.exec('SELECT * FROM stories WHERE id = ?', [run.story_id]);
     const story = rowsToObjects(storyRows[0])[0];
     const projRows = db.exec('SELECT * FROM projects WHERE id = ?', [story.project_id]);

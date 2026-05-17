@@ -607,6 +607,25 @@
       "backToList": "Back to list"
     }
   },
+  "stepLibrary": {
+    "sectionTitle":    "Step library",
+    "sectionDesc":     "Reusable steps for preconditions, setup and verification in test runs",
+    "addStep":         "Add shared step",
+    "titlePlaceholder":"e.g. Login as admin",
+    "empty":           "No steps defined. Add the first one.",
+    "insertBtn":       "Insert from library",
+    "searchPlaceholder":"Search step…",
+    "pickerTitle":     "Insert steps from library",
+    "pickerEmpty":     "No steps in this project's library",
+    "pickerNoMatch":   "No matches",
+    "categories": {
+      "setup":        "Setup",
+      "precondition": "Precondition",
+      "verification": "Verification",
+      "teardown":     "Teardown",
+      "util":         "Utility"
+    }
+  },
   "tcTags": {
     "label": "Type",
     "addTag": "Tag",
