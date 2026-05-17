@@ -76,7 +76,11 @@ export default function ExecutionSummary({ execution, onClose, onNewRun, onRetes
   const done   = total - (stats.pending || 0);
   const passed = stats.pass || 0;
 
-  const [showJira, setShowJira]       = useState(false);
+  const [showJira, setShowJira]         = useState(false);
+  const [showSync, setShowSync]         = useState(false);
+  const [syncing, setSyncing]           = useState(false);
+  const [syncResults, setSyncResults]   = useState(null);
+  const exportedBugs = (execution.results || []).filter(r => r.bug_jira_key);
   const failedItems = (execution.results || []).filter(r => r.status === 'fail' || r.status === 'blocked');
   const [approving, setApproving]       = useState(false);
   const [approved, setApproved]         = useState(execution.story_estado === 'approved');
@@ -91,6 +95,25 @@ export default function ExecutionSummary({ execution, onClose, onNewRun, onRetes
   const handleApprove = () => setShowChecklist(true);
 
   const handlePrint = () => window.print();
+
+  const handleSyncJira = async (e) => {
+    e.preventDefault();
+    setSyncing(true);
+    setSyncResults(null);
+    try {
+      const form = e.target;
+      const data = await executionsApi.syncJira(execution.id, {
+        jiraUrl: form.jiraUrl.value,
+        email:   form.email.value,
+        apiToken: form.apiToken.value
+      });
+      setSyncResults(data);
+      if (data.synced > 0) addToast(t('execution.syncedOk', { count: data.synced }), 'success');
+      else addToast(t('execution.syncedNone'), 'info');
+    } catch (err) {
+      addToast(err.message, 'error');
+    } finally { setSyncing(false); }
+  };
 
   const handleExportJira = async (e) => {
     e.preventDefault();
@@ -153,6 +176,15 @@ export default function ExecutionSummary({ execution, onClose, onNewRun, onRetes
             </svg>
             {t('export.print')}
           </button>
+          {exportedBugs.length > 0 && (
+            <button type="button" onClick={() => setShowSync(s => !s)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30 px-3 py-1.5 text-xs font-medium text-blue-700 dark:text-blue-300 transition-colors hover:bg-blue-100 dark:hover:bg-blue-950/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5 opacity-90" aria-hidden="true">
+                <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.004-1.005zm5.723-5.756H5.757a5.215 5.215 0 0 0 5.214 5.214h2.131v2.058a5.218 5.218 0 0 0 5.215 5.214V6.762a1.005 1.005 0 0 0-1.023-1.005zM23.013 0H11.47a5.215 5.215 0 0 0 5.215 5.215h2.13v2.057A5.215 5.215 0 0 0 24.018 12.49V1.005A1.005 1.005 0 0 0 23.013 0z"/>
+              </svg>
+              {t('execution.syncJira', { count: exportedBugs.length })}
+            </button>
+          )}
           <button type="button" onClick={copyMarkdown}
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden="true">
@@ -280,6 +312,42 @@ export default function ExecutionSummary({ execution, onClose, onNewRun, onRetes
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {showSync && (
+        <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50/60 dark:bg-blue-950/20 p-4 mt-2">
+          <p className="mb-3 text-xs font-semibold text-blue-700 dark:text-blue-300">
+            {t('execution.syncJiraTitle', { count: exportedBugs.length })}
+          </p>
+          <form onSubmit={handleSyncJira} className="grid grid-cols-2 gap-2">
+            {[['jiraUrl','url','Jira URL','https://company.atlassian.net'],
+              ['email','email','Email','you@company.com'],
+              ['apiToken','password','API Token','token']].map(([name, type, label, ph]) => (
+              <div key={name} className={name === 'jiraUrl' ? 'col-span-2' : ''}>
+                <label className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-400">{label}</label>
+                <input name={name} type={type} required placeholder={ph}
+                  className="block w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" />
+              </div>
+            ))}
+            {syncResults && (
+              <div className="col-span-2 text-xs text-slate-600 dark:text-slate-400">
+                {t('execution.syncResult', { synced: syncResults.synced, total: exportedBugs.length })}
+                {syncResults.updates.map(u => (
+                  <div key={u.tcId} className="mt-0.5">
+                    <span className="font-mono">{u.key}</span>: {u.from} → <span className="font-semibold">{u.to}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="col-span-2 flex justify-end gap-2">
+              <button type="button" onClick={() => setShowSync(false)} className="px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300">{t('jira.cancel')}</button>
+              <button type="submit" disabled={syncing}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                {syncing ? t('common.loading') : t('execution.syncBtn')}
+              </button>
+            </div>
+          </form>
         </div>
       )}
 

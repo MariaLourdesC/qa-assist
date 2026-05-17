@@ -15,6 +15,7 @@ import PrintableAnalysis from '../components/PrintableAnalysis';
 import ProjectStats from '../components/ProjectStats';
 import QADashboard from '../components/QADashboard';
 import ScoreTrend from '../components/ScoreTrend';
+import ReleasesPanel from '../components/ReleasesPanel';
 
 export default function StoryAnalyzerPage() {
   const { projectId } = useParams();
@@ -163,6 +164,11 @@ export default function StoryAnalyzerPage() {
           />
 
           <QADashboard
+            projectId={projectId}
+            refreshKey={historyRefreshKey}
+          />
+
+          <ReleasesPanel
             projectId={projectId}
             refreshKey={historyRefreshKey}
           />

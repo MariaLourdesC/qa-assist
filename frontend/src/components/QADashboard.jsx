@@ -63,7 +63,7 @@ export default function QADashboard({ projectId, refreshKey }) {
 
   if (!data || data.executions?.total === 0) return null;
 
-  const { executions, bugs, stories_by_estado, coverage_by_module, recent_executions } = data;
+  const { executions, bugs, stories_by_estado, coverage_by_module, defect_density, ac_coverage, recent_executions } = data;
   const totalStories = Object.values(stories_by_estado || {}).reduce((a, b) => a + b, 0);
   const maxBug = Math.max(...Object.values(bugs.by_severity || {}), 1);
 
@@ -230,6 +230,61 @@ export default function QADashboard({ projectId, refreshKey }) {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+            )}
+
+            {/* ── AC Coverage ── */}
+            {ac_coverage?.total > 0 && (
+              <div>
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  {t('qaDashboard.acCoverage')}
+                  <span className="ml-2 font-normal normal-case text-slate-400 dark:text-slate-500">
+                    {ac_coverage.covered}/{ac_coverage.total} {t('qaDashboard.acsCovered')}
+                  </span>
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-3 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        ac_coverage.pct >= 80 ? 'bg-emerald-500' : ac_coverage.pct >= 50 ? 'bg-amber-400' : 'bg-red-400'
+                      }`}
+                      style={{ width: `${ac_coverage.pct || 0}%` }}
+                    />
+                  </div>
+                  <span className={`text-sm font-bold tabular-nums ${
+                    ac_coverage.pct >= 80 ? 'text-emerald-600 dark:text-emerald-400'
+                    : ac_coverage.pct >= 50 ? 'text-amber-600 dark:text-amber-400'
+                    : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {ac_coverage.pct ?? '—'}%
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* ── Defect density by module ── */}
+            {defect_density?.length > 0 && defect_density.some(d => d.total_bugs > 0) && (
+              <div>
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  {t('qaDashboard.defectDensity')}
+                </p>
+                <div className="space-y-1.5">
+                  {defect_density.filter(d => d.total_bugs > 0).map(mod => (
+                    <div key={mod.modulo} className="flex items-center gap-3">
+                      <span className="w-28 shrink-0 truncate text-xs font-medium text-slate-700 dark:text-slate-300" title={mod.modulo}>
+                        {mod.modulo}
+                      </span>
+                      <div className="flex-1 h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div className="h-full rounded-full bg-red-400 transition-all"
+                          style={{ width: `${Math.min((mod.total_bugs / 10) * 100, 100)}%` }} />
+                      </div>
+                      <span className="shrink-0 text-[11px] tabular-nums text-slate-600 dark:text-slate-400">
+                        {mod.total_bugs} bug{mod.total_bugs !== 1 ? 's' : ''} / {mod.stories} hist.
+                        <span className="ml-1 text-slate-400 dark:text-slate-500">({mod.density})</span>
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

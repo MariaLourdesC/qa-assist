@@ -352,4 +352,70 @@ function severityToPriority(sev) {
   return { critica: 'Highest', alta: 'High', media: 'Medium', baja: 'Low' }[sev] || 'Medium';
 }
 
+// Maps Jira status category → bug_status
+function jiraStatusToBugStatus(jiraStatus) {
+  const name = (jiraStatus?.name || '').toLowerCase();
+  const cat  = (jiraStatus?.statusCategory?.key || '').toLowerCase();
+  if (cat === 'done' || ['done','closed','resolved','fixed'].some(s => name.includes(s))) return 'fixed';
+  if (name.includes('won\'t') || name.includes('wont') || name.includes('invalid')) return 'wont_fix';
+  if (name.includes('duplicate')) return 'duplicate';
+  if (name.includes('verif')) return 'verified';
+  return 'open';
+}
+
+// ── POST /api/executions/:id/sync-jira ────────────────────────────────────
+router.post('/:id/sync-jira', exportLimiter, async (req, res) => {
+  try {
+    const db = await getDb();
+    if (!ownExecution(db, req.params.id, req.user.id)) {
+      return res.status(404).json({ error: 'Execution not found' });
+    }
+
+    const { jiraUrl, email, apiToken } = req.body;
+    if (!jiraUrl || !email || !apiToken) {
+      return res.status(400).json({ error: 'jiraUrl, email and apiToken are required' });
+    }
+
+    try { validateJiraUrl(jiraUrl); }
+    catch (err) { return res.status(err.status || 400).json({ error: err.message }); }
+
+    const bugs = rows(db.exec(
+      `SELECT id, tc_id, bug_jira_key, bug_status
+       FROM test_execution_results
+       WHERE execution_id = ? AND bug_jira_key IS NOT NULL`,
+      [req.params.id]
+    ));
+
+    if (bugs.length === 0) return res.json({ synced: 0, updates: [] });
+
+    const base64   = Buffer.from(`${email}:${apiToken}`).toString('base64');
+    const cleanUrl = jiraUrl.replace(/\/$/, '');
+    const updates  = [];
+    const errors   = [];
+
+    for (const bug of bugs) {
+      try {
+        const resp = await fetch(`${cleanUrl}/rest/api/3/issue/${bug.bug_jira_key}`, {
+          headers: { Authorization: `Basic ${base64}`, Accept: 'application/json' }
+        });
+        if (!resp.ok) { errors.push({ key: bug.bug_jira_key, error: `HTTP ${resp.status}` }); continue; }
+        const issue   = await resp.json();
+        const newStatus = jiraStatusToBugStatus(issue.fields?.status);
+        if (newStatus !== bug.bug_status) {
+          db.run(
+            'UPDATE test_execution_results SET bug_status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+            [newStatus, bug.id]
+          );
+          updates.push({ tcId: bug.tc_id, key: bug.bug_jira_key, from: bug.bug_status, to: newStatus });
+        }
+      } catch (err) {
+        errors.push({ key: bug.bug_jira_key, error: err.message });
+      }
+    }
+
+    if (updates.length) saveDb();
+    res.json({ synced: updates.length, updates, errors });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 module.exports = router;

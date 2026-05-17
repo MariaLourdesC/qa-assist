@@ -583,6 +583,12 @@
     "backToTcs": "Back to test cases",
     "sectionTc": "Test Cases ({{count}})",
     "sectionEc": "Edge Cases / Negatives ({{count}})",
+    "syncJira":        "Sync Jira ({{count}})",
+    "syncJiraTitle":   "Sync {{count}} bug(s) with Jira",
+    "syncBtn":         "Sync",
+    "syncedOk":        "{{count}} status(es) updated from Jira",
+    "syncedNone":      "All up to date — no status changes",
+    "syncResult":      "{{synced}} of {{total}} updated",
     "approveBtn": "Approve story",
     "approved": "Story approved ✓",
     "approvedOk": "Story marked as approved",
@@ -624,6 +630,31 @@
       "verification": "Verification",
       "teardown":     "Teardown",
       "util":         "Utility"
+    }
+  },
+  "releases": {
+    "title":         "Releases / Baselines",
+    "count":         "{{count}} release(s)",
+    "create":        "New release",
+    "empty":         "No releases defined for this project",
+    "name":          "Name",
+    "namePlaceholder":"e.g. Sprint 12 · Release 2.3",
+    "version":       "Version",
+    "deadline":      "Deadline",
+    "stories":       "{{count}} story/stories included",
+    "addStory":      "Add story…",
+    "lock":          "Lock release",
+    "lockConfirm":   "Lock \"{{name}}\"? A snapshot of all stories will be taken. This cannot be undone.",
+    "lockedOk":      "\"{{name}}\" locked successfully",
+    "deleteConfirm": "Delete release \"{{name}}\"?",
+    "deletedOk":     "Release deleted",
+    "daysLeft":      "{{d}}d left",
+    "overdue":       "{{d}}d overdue",
+    "status": {
+      "draft":    "Draft",
+      "active":   "Active",
+      "locked":   "Locked",
+      "archived": "Archived"
     }
   },
   "tcTags": {
@@ -689,7 +720,10 @@
     "bugsBySeverity": "Bugs by severity",
     "exportedToJira": "{{count}} in Jira",
     "recentRuns": "Recent runs",
-    "coverageByModule": "Coverage by module"
+    "coverageByModule": "Coverage by module",
+    "acCoverage":       "Acceptance criteria coverage",
+    "acsCovered":       "criteria covered by TCs",
+    "defectDensity":    "Defect density by module"
   },
   "evidence": {
     "label":      "Evidence (images / videos)",

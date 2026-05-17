@@ -142,7 +142,18 @@ export const executionsApi = {
   updateResult: (id, data)     => fetchApi(`/api/executions/${id}/results`, { method: 'PATCH', body: JSON.stringify(data) }),
   complete:     (id, data)     => fetchApi(`/api/executions/${id}/complete`, { method: 'PATCH', body: JSON.stringify(data || {}) }),
   approve:      (id)           => fetchApi(`/api/executions/${id}/approve`,  { method: 'PATCH' }),
-  exportBugs:   (id, data)     => fetchApi(`/api/executions/${id}/export-bugs`, { method: 'POST', body: JSON.stringify(data) })
+  exportBugs:   (id, data)     => fetchApi(`/api/executions/${id}/export-bugs`, { method: 'POST', body: JSON.stringify(data) }),
+  syncJira:     (id, data)     => fetchApi(`/api/executions/${id}/sync-jira`,   { method: 'POST', body: JSON.stringify(data) })
+};
+
+export const releasesApi = {
+  getAll:       (projectId)    => fetchApi(`/api/releases?project_id=${projectId}`),
+  create:       (data)         => fetchApi('/api/releases',           { method: 'POST',   body: JSON.stringify(data) }),
+  update:       (id, data)     => fetchApi(`/api/releases/${id}`,     { method: 'PUT',    body: JSON.stringify(data) }),
+  lock:         (id)           => fetchApi(`/api/releases/${id}/lock`, { method: 'PATCH' }),
+  delete:       (id)           => fetchApi(`/api/releases/${id}`,     { method: 'DELETE' }),
+  addStory:     (id, storyId)  => fetchApi(`/api/releases/${id}/stories`, { method: 'POST', body: JSON.stringify({ story_id: storyId }) }),
+  removeStory:  (id, storyId)  => fetchApi(`/api/releases/${id}/stories/${storyId}`, { method: 'DELETE' })
 };
 
 export const stepLibraryApi = {

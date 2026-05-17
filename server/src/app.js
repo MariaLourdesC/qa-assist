@@ -70,6 +70,9 @@ const path = require('path');
 app.use('/api/uploads', uploadsRouter);
 app.use('/uploads', require('express').static(UPLOAD_DIR)); // serve uploaded files
 
+// ── Releases / baselines ──────────────────────────────────────────────────
+app.use('/api/releases', require('./routes/releases'));
+
 // ── Step library ──────────────────────────────────────────────────────────
 app.use('/api/step-library', require('./routes/step-library'));
 

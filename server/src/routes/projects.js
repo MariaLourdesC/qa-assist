@@ -167,12 +167,60 @@ router.get('/:id/qa-stats', async (req, res) => {
       modulo: v[0] || '—', stories: v[1] || 0, qa_ok: v[2] || 0, qa_fail: v[3] || 0, pending: v[4] || 0
     })) : [];
 
+    // ── Defect density by module (bugs per story by module) ───────────────
+    const defectRows = db.exec(`
+      SELECT s.modulo,
+             COUNT(DISTINCT s.id)  AS stories,
+             COUNT(ter.id)         AS total_bugs
+      FROM stories s
+      LEFT JOIN analysis_runs ar ON ar.story_id = s.id
+      LEFT JOIN test_executions te ON te.analysis_run_id = ar.id
+      LEFT JOIN test_execution_results ter
+            ON ter.execution_id = te.id AND ter.status IN ('fail','blocked')
+      WHERE s.project_id = ?
+      GROUP BY s.modulo
+      ORDER BY total_bugs DESC`, [req.params.id]);
+
+    const defect_density = defectRows.length ? defectRows[0].values.map(v => ({
+      modulo:      v[0] || '—',
+      stories:     v[1] || 0,
+      total_bugs:  v[2] || 0,
+      density:     v[1] > 0 ? Math.round(((v[2] || 0) / v[1]) * 10) / 10 : 0
+    })) : [];
+
+    // ── AC Coverage: % of ACs with at least 1 executed TC ─────────────────
+    // Uses traceability_json to count covered ACs vs total ACs
+    const traceRows = db.exec(`
+      SELECT ar.traceability_json, ar.final_output_json
+      FROM analysis_runs ar
+      JOIN stories s ON s.id = ar.story_id
+      WHERE s.project_id = ?
+      AND ar.id IN (
+        SELECT MAX(id) FROM analysis_runs GROUP BY story_id
+      )`, [req.params.id]);
+
+    let totalACs = 0, coveredACs = 0;
+    if (traceRows.length) {
+      traceRows[0].values.forEach(([traceJson, finalJson]) => {
+        try {
+          const final  = JSON.parse(finalJson || '{}');
+          const trace  = JSON.parse(traceJson || '{}');
+          const acs    = final.criterios_aceptacion || [];
+          totalACs  += acs.length;
+          coveredACs += acs.filter(ca => Array.isArray(trace[ca.id]) && trace[ca.id].length > 0).length;
+        } catch {}
+      });
+    }
+    const ac_coverage = totalACs > 0 ? Math.round((coveredACs / totalACs) * 100) : null;
+
     res.json({
       stories_by_estado,
       executions: { total: total_executions || 0, completed: completed_executions || 0,
                     total_cases_run: total_cases_run || 0, pass_rate },
       bugs: { total: total_bugs, by_severity: bugs_by_severity, exported: exported_bugs },
       coverage_by_module,
+      defect_density,
+      ac_coverage: { pct: ac_coverage, covered: coveredACs, total: totalACs },
       recent_executions
     });
   } catch (err) { res.status(500).json({ error: err.message }); }

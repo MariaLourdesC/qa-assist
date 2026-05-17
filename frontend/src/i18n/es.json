@@ -583,6 +583,12 @@
     "backToTcs": "Volver a test cases",
     "sectionTc": "Test Cases ({{count}})",
     "sectionEc": "Edge Cases / Negativos ({{count}})",
+    "syncJira":        "Sync Jira ({{count}})",
+    "syncJiraTitle":   "Sincronizar {{count}} bug(s) con Jira",
+    "syncBtn":         "Sincronizar",
+    "syncedOk":        "{{count}} estado(s) actualizado(s) desde Jira",
+    "syncedNone":      "Todo al día — sin cambios de estado",
+    "syncResult":      "{{synced}} de {{total}} actualizados",
     "approveBtn": "Aprobar historia",
     "approved": "Historia aprobada ✓",
     "approvedOk": "Historia marcada como aprobada",
@@ -624,6 +630,31 @@
       "verification": "Verificación",
       "teardown":     "Teardown",
       "util":         "Util"
+    }
+  },
+  "releases": {
+    "title":         "Releases / Baselines",
+    "count":         "{{count}} release(s)",
+    "create":        "Nueva release",
+    "empty":         "No hay releases definidas para este proyecto",
+    "name":          "Nombre",
+    "namePlaceholder":"Ej: Sprint 12 · Release 2.3",
+    "version":       "Versión",
+    "deadline":      "Fecha límite",
+    "stories":       "{{count}} historia(s) incluidas",
+    "addStory":      "Agregar historia…",
+    "lock":          "Bloquear release",
+    "lockConfirm":   "¿Bloquear \"{{name}}\"? Se tomará un snapshot de todas las historias. Esta acción no se puede deshacer.",
+    "lockedOk":      "\"{{name}}\" bloqueada correctamente",
+    "deleteConfirm": "¿Eliminar release \"{{name}}\"?",
+    "deletedOk":     "Release eliminada",
+    "daysLeft":      "{{d}}d restantes",
+    "overdue":       "Vencida hace {{d}}d",
+    "status": {
+      "draft":    "Borrador",
+      "active":   "Activa",
+      "locked":   "Bloqueada",
+      "archived": "Archivada"
     }
   },
   "tcTags": {
@@ -689,7 +720,10 @@
     "bugsBySeverity": "Bugs por severidad",
     "exportedToJira": "{{count}} en Jira",
     "recentRuns": "Últimas ejecuciones",
-    "coverageByModule": "Cobertura por módulo"
+    "coverageByModule": "Cobertura por módulo",
+    "acCoverage":       "Cobertura de criterios de aceptación",
+    "acsCovered":       "criterios cubiertos con TCs",
+    "defectDensity":    "Densidad de defectos por módulo"
   },
   "evidence": {
     "label":      "Evidencias (imágenes / videos)",
