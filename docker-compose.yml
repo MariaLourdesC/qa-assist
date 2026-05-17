@@ -11,6 +11,7 @@ services:
     volumes:
       - qa_data:/app/data
       - qa_backups:/app/backups
+      - qa_uploads:/app/uploads
     expose:
       - "3001"
     deploy:
@@ -50,4 +51,6 @@ volumes:
   qa_data:
     driver: local
   qa_backups:
+    driver: local
+  qa_uploads:
     driver: local

@@ -170,7 +170,16 @@ router.get('/:id', async (req, res) => {
     const storyId = storyIdFromExec(db, req.params.id);
     const storyRows = storyId ? db.exec('SELECT estado FROM stories WHERE id = ?', [storyId]) : [];
     const storyEstado = storyRows.length ? storyRows[0].values[0][0] : null;
-    res.json({ ...execs[0], results, stats: execStats(results), story_id: storyId, story_estado: storyEstado });
+
+    // Parse evidence_files_json for each result
+    const hydrated = results.map(r => ({
+      ...r,
+      evidence_files: r.evidence_files_json
+        ? (() => { try { return JSON.parse(r.evidence_files_json); } catch { return []; } })()
+        : []
+    }));
+
+    res.json({ ...execs[0], results: hydrated, stats: execStats(results), story_id: storyId, story_estado: storyEstado });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -182,7 +191,7 @@ router.patch('/:id/results', async (req, res) => {
     if (!ownExecution(db, req.params.id, req.user.id)) {
       return res.status(404).json({ error: 'Execution not found' });
     }
-    const { tc_id, status, bug_titulo, bug_pasos_reales, bug_severidad, bug_ambiente, bug_screenshot_url, bug_notas } = req.body;
+    const { tc_id, status, bug_titulo, bug_pasos_reales, bug_severidad, bug_ambiente, bug_screenshot_url, bug_notas, evidence_files } = req.body;
     if (!tc_id || !status) return res.status(400).json({ error: 'tc_id and status required' });
     if (typeof tc_id !== 'string') return res.status(400).json({ error: 'tc_id must be a string' });
 
@@ -199,15 +208,20 @@ router.patch('/:id/results', async (req, res) => {
     }
 
     const { bug_status } = req.body;
+    const evidenceJson = Array.isArray(evidence_files) && evidence_files.length
+      ? JSON.stringify(evidence_files)
+      : null;
+
     db.run(
       `UPDATE test_execution_results
        SET status = ?, bug_titulo = ?, bug_pasos_reales = ?, bug_severidad = ?,
-           bug_ambiente = ?, bug_screenshot_url = ?, bug_notas = ?, bug_status = ?, updated_at = CURRENT_TIMESTAMP
+           bug_ambiente = ?, bug_screenshot_url = ?, bug_notas = ?, bug_status = ?,
+           evidence_files_json = ?, updated_at = CURRENT_TIMESTAMP
        WHERE execution_id = ? AND tc_id = ?`,
       [status,
        bug_titulo || null, bug_pasos_reales || null,
        bug_severidad || 'media', bug_ambiente || null, bug_screenshot_url || null,
-       bug_notas || null, bug_status || 'open',
+       bug_notas || null, bug_status || 'open', evidenceJson,
        req.params.id, tc_id]
     );
     saveDb();

@@ -64,6 +64,12 @@ app.use('/api/jira', require('./routes/jira'));
 // ── Test executions & bug reports ─────────────────────────────────────────
 app.use('/api/executions', require('./routes/executions'));
 
+// ── File uploads (evidencias de bugs) ────────────────────────────────────
+const { router: uploadsRouter, UPLOAD_DIR } = require('./routes/uploads');
+const path = require('path');
+app.use('/api/uploads', uploadsRouter);
+app.use('/uploads', require('express').static(UPLOAD_DIR)); // serve uploaded files
+
 // ── Global search ─────────────────────────────────────────────────────────
 app.use('/api/search', require('./routes/search'));
 

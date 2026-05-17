@@ -17,6 +17,7 @@ frontend/.vite/
 # SQLite database
 server/data/
 server/backups/
+server/uploads/
 
 # Logs
 *.log

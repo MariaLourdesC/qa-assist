@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import EvidenceUploader from './EvidenceUploader';
 
 const SEVERITIES = ['critica', 'alta', 'media', 'baja'];
 
@@ -80,6 +81,13 @@ export default function BugReportForm({ bug, onChange, tcTitulo }) {
         </div>
       </div>
 
+      {/* Evidencias — upload de imágenes y videos */}
+      <EvidenceUploader
+        files={bug.evidence_files || []}
+        onChange={files => set('evidence_files', files)}
+        maxFiles={5}
+      />
+
       <div>
         <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
           {t('execution.bugScreenshot')}
@@ -88,7 +96,7 @@ export default function BugReportForm({ bug, onChange, tcTitulo }) {
           type="url"
           value={bug.bug_screenshot_url || ''}
           onChange={e => set('bug_screenshot_url', e.target.value)}
-          placeholder="https://..."
+          placeholder="https://... (URL externa opcional)"
           className="block w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1"
         />
       </div>

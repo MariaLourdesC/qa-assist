@@ -16,7 +16,7 @@ RUN pnpm install --frozen-lockfile --prod
 COPY src/ ./src/
 
 # Writable dirs for SQLite and backups — owned by non-root user
-RUN mkdir -p data backups && chown -R appuser:appgroup /app
+RUN mkdir -p data backups uploads && chown -R appuser:appgroup /app
 
 # Drop root privileges
 USER appuser

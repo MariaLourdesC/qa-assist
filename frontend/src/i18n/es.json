@@ -672,6 +672,12 @@
     "recentRuns": "Últimas ejecuciones",
     "coverageByModule": "Cobertura por módulo"
   },
+  "evidence": {
+    "label":      "Evidencias (imágenes / videos)",
+    "dropHint":   "Arrastrá archivos aquí o hacé click para seleccionar",
+    "typeHint":   "JPG, PNG, GIF, WebP · MP4, WebM · máx 10 MB imagen / 100 MB video",
+    "uploading":  "Subiendo…"
+  },
   "offline": {
     "message": "Sin conexión — verificá tu red o que el servidor esté corriendo."
   },

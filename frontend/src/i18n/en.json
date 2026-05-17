@@ -672,6 +672,12 @@
     "recentRuns": "Recent runs",
     "coverageByModule": "Coverage by module"
   },
+  "evidence": {
+    "label":      "Evidence (images / videos)",
+    "dropHint":   "Drag files here or click to select",
+    "typeHint":   "JPG, PNG, GIF, WebP · MP4, WebM · max 10 MB image / 100 MB video",
+    "uploading":  "Uploading…"
+  },
   "offline": {
     "message": "No connection — check your network or make sure the server is running."
   },
